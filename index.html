@@ -6,41 +6,57 @@
     <title>FRIZ SHOP</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: #0f0f0f;
-            color: #fff;
+            background: #0a0a0a;
+            color: #e0e0e0;
             padding: 16px 12px 80px 12px;
             min-height: 100vh;
         }
+
         .header {
             display: flex;
             justify-content: space-between;
             align-items: center;
             margin-bottom: 20px;
             padding-bottom: 12px;
-            border-bottom: 1px solid #1f1f1f;
+            border-bottom: 1px solid #2a0a0a;
         }
         .header h1 {
             font-size: 22px;
             font-weight: 700;
-            background: linear-gradient(135deg, #0088cc, #00ccff);
+            background: linear-gradient(135deg, #cc3333, #ff4444);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
         .header .cart-badge {
-            background: #0088cc;
+            background: #cc3333;
             color: #fff;
             border-radius: 50%;
             padding: 4px 10px;
             font-size: 14px;
             font-weight: 600;
+            cursor: pointer;
         }
+        .header .cart-badge:hover {
+            background: #aa2222;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 12px 16px;
+            background: #1a0a0a;
+            border: 1px solid #331111;
+            border-radius: 12px;
+            color: #e0e0e0;
+            font-size: 15px;
+            margin-bottom: 16px;
+            outline: none;
+        }
+        .search-input:focus { border-color: #cc3333; }
+        .search-input::placeholder { color: #555; }
+
         .filter-row {
             display: flex;
             gap: 8px;
@@ -50,9 +66,9 @@
             flex-wrap: nowrap;
         }
         .filter-row button {
-            background: #1e1e1e;
-            border: 1px solid #2a2a2a;
-            color: #aaa;
+            background: #1a0a0a;
+            border: 1px solid #331111;
+            color: #888;
             padding: 6px 16px;
             border-radius: 20px;
             font-size: 13px;
@@ -61,59 +77,61 @@
             transition: 0.2s;
         }
         .filter-row button.active {
-            background: #0088cc;
-            border-color: #0088cc;
+            background: #cc3333;
+            border-color: #cc3333;
             color: #fff;
         }
+        .filter-row button:hover {
+            background: #2a1111;
+            color: #fff;
+        }
+
         .card {
-            background: #1a1a1a;
+            background: #120808;
             border-radius: 16px;
             padding: 16px;
             margin-bottom: 14px;
-            border: 1px solid #252525;
+            border: 1px solid #1f0c0c;
             transition: 0.2s;
         }
+        .card:hover { border-color: #cc3333; }
+
         .card-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
             margin-bottom: 6px;
         }
-        .card-header .flag {
-            font-size: 28px;
-        }
-        .card-header .code {
-            font-size: 18px;
-            font-weight: 600;
-            color: #fff;
-        }
-        .card-header .price {
-            font-size: 20px;
-            font-weight: 700;
-            color: #00ccff;
-        }
-        .card-desc {
-            font-size: 13px;
-            color: #888;
-            margin-bottom: 8px;
-            line-height: 1.4;
-        }
+        .card-header .flag { font-size: 28px; }
+        .card-header .code { font-size: 18px; font-weight: 600; color: #fff; }
+        .card-header .price { font-size: 20px; font-weight: 700; color: #ff4444; }
+
+        .card-desc { font-size: 13px; color: #777; margin-bottom: 8px; line-height: 1.4; }
+
         .card-meta {
             display: flex;
-            gap: 16px;
+            flex-wrap: wrap;
+            gap: 8px;
             font-size: 13px;
             color: #666;
             margin-bottom: 12px;
         }
         .card-meta span {
-            background: #1e1e1e;
-            padding: 2px 10px;
+            background: #1a0a0a;
+            padding: 2px 12px;
             border-radius: 12px;
+            border: 1px solid #221010;
         }
+        .card-meta .self-badge {
+            background: #cc3333;
+            color: #fff;
+            border-color: #cc3333;
+        }
+
         .card .btn-buy {
             width: 100%;
             padding: 10px;
-            background: #0088cc;
+            background: #cc3333;
             border: none;
             border-radius: 10px;
             color: #fff;
@@ -122,52 +140,17 @@
             cursor: pointer;
             transition: 0.2s;
         }
-        .card .btn-buy:hover {
-            background: #0077b3;
-        }
-        .card .btn-buy:active {
-            transform: scale(0.97);
-        }
-        .bottom-nav {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            background: #0f0f0f;
-            border-top: 1px solid #1a1a1a;
-            display: flex;
-            justify-content: space-around;
-            padding: 10px 0 14px 0;
-            backdrop-filter: blur(10px);
-        }
-        .bottom-nav a {
-            color: #666;
-            text-decoration: none;
-            font-size: 12px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 2px;
-            transition: 0.2s;
-        }
-        .bottom-nav a.active {
-            color: #0088cc;
-        }
-        .bottom-nav a .icon {
-            font-size: 22px;
-        }
-        .empty {
-            text-align: center;
-            color: #555;
-            padding: 40px 0;
-            font-size: 16px;
-        }
+        .card .btn-buy:hover { background: #aa2222; transform: scale(1.01); }
+        .card .btn-buy:active { transform: scale(0.97); }
+
+        .empty { text-align: center; color: #444; padding: 40px 0; font-size: 16px; }
+
         .toast {
             position: fixed;
             top: 20px;
             left: 50%;
             transform: translateX(-50%);
-            background: #0088cc;
+            background: #cc3333;
             color: #fff;
             padding: 10px 24px;
             border-radius: 12px;
@@ -177,23 +160,32 @@
             z-index: 999;
             pointer-events: none;
         }
-        .toast.show {
-            opacity: 1;
+        .toast.show { opacity: 1; }
+
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: #0a0a0a;
+            border-top: 1px solid #1a0a0a;
+            display: flex;
+            justify-content: center;
+            padding: 10px 0 14px 0;
+            backdrop-filter: blur(10px);
         }
-        .search-input {
-            width: 100%;
-            padding: 10px 14px;
-            background: #1a1a1a;
-            border: 1px solid #2a2a2a;
-            border-radius: 12px;
-            color: #fff;
-            font-size: 15px;
-            margin-bottom: 16px;
-            outline: none;
+        .bottom-nav a {
+            color: #cc3333;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: 0.2s;
         }
-        .search-input:focus {
-            border-color: #0088cc;
-        }
+        .bottom-nav a .icon { font-size: 22px; }
+        .bottom-nav a:hover { color: #ff4444; }
     </style>
 </head>
 <body>
@@ -202,27 +194,23 @@
 
 <div class="header">
     <h1>🛒 FRIZ SHOP</h1>
-    <div class="cart-badge" id="cartCount">0</div>
+    <div class="cart-badge" id="cartCount" onclick="showCart()">0</div>
 </div>
 
 <input class="search-input" id="searchInput" placeholder="🔍 Поиск по стране или коду..." />
 
 <div class="filter-row" id="filterRow">
     <button class="active" data-filter="all">Все</button>
-    <button data-filter="new">Новорег</button>
-    <button data-filter="auto">Авторег</button>
-    <button data-filter="self">Саморег</button>
-    <button data-filter="otliga">С отлегой</button>
-    <button data-filter="spam">Спам-блок</button>
+    <button data-filter="новорег">🆕 Новорег</button>
+    <button data-filter="авторег">🤖 Авторег</button>
+    <button data-filter="саморег">📱 Саморег</button>
+    <button data-filter="отлега">⏳ Отлега</button>
 </div>
 
 <div id="catalog"></div>
 
 <div class="bottom-nav">
-    <a href="#" class="active" onclick="filterAll()"><span class="icon">🏠</span> Каталог</a>
-    <a href="#"><span class="icon">🎁</span> Кейсы</a>
-    <a href="#"><span class="icon">💳</span> Пополнить</a>
-    <a href="#" onclick="openProfile()"><span class="icon">👤</span> Профиль</a>
+    <a href="#" onclick="showCart()"><span class="icon">🛍</span> Корзина</a>
 </div>
 
 <script>
@@ -233,75 +221,88 @@
     let cart = [];
     let currentFilter = 'all';
 
+    // ============================================================
+    // ДАННЫЕ
+    // ============================================================
     const countries = [
-        { code: "+1", flag: "🇺🇸", name: "США", desc: "отлега до 2 мес, без спама", price: 49, type: "otliga", spam: false },
-        { code: "+52", flag: "🇲🇽", name: "Мексика", desc: "новорег/авторег/саморег", price: 90, type: "new", spam: false },
-        { code: "+57", flag: "🇨🇴", name: "Колумбия", desc: "новорег/авторег/саморег", price: 80, type: "new", spam: false },
-        { code: "+62", flag: "🇮🇩", name: "Индонезия", desc: "новорег/авторег/саморег", price: 80, type: "new", spam: false },
-        { code: "+95", flag: "🇲🇲", name: "Мьянма", desc: "новорег/авторег/саморег", price: 35, type: "new", spam: false },
-        { code: "+233", flag: "🇬🇭", name: "Гана", desc: "новорег/авторег/саморег", price: 60, type: "new", spam: false },
-        { code: "+228", flag: "🇹🇬", name: "Того", desc: "новорег/авторег/саморег", price: 90, type: "new", spam: false },
-        { code: "+222", flag: "🇲🇷", name: "Мавритания", desc: "новорег/авторег/саморег", price: 299, type: "new", spam: false },
-        { code: "+234", flag: "🇳🇬", name: "Нигерия", desc: "новорег/авторег/саморег", price: 70, type: "new", spam: false },
-        { code: "+20", flag: "🇪🇬", name: "Египет", desc: "новорег/авторег/саморег", price: 90, type: "new", spam: false },
-        { code: "+58", flag: "🇻🇪", name: "Венесуэла", desc: "новорег/авторег/саморег", price: 90, type: "new", spam: false },
-        { code: "+963", flag: "🇸🇾", name: "Сирия", desc: "новорег/авторег/саморег", price: 90, type: "new", spam: false },
-        { code: "+251", flag: "🇪🇹", name: "Эфиопия", desc: "авторег/саморег", price: 90, type: "auto", spam: false },
-        { code: "+60", flag: "🇲🇾", name: "Малайзия", desc: "авторег/саморег", price: 90, type: "auto", spam: false },
-        { code: "+51", flag: "🇵🇪", name: "Перу", desc: "авторег/саморег", price: 90, type: "auto", spam: false },
-        { code: "+90", flag: "🇹🇷", name: "Турция", desc: "новорег/авторег/саморег", price: 90, type: "new", spam: false },
-        { code: "+966", flag: "🇸🇦", name: "Саудовская Аравия", desc: "новорег/авторег/саморег", price: 90, type: "new", spam: false },
-        { code: "+254", flag: "🇰🇪", name: "Кения", desc: "новорег/авторег/саморег", price: 90, type: "new", spam: false },
-        { code: "+961", flag: "🇱🇧", name: "Ливан", desc: "новорег/авторег/саморег", price: 90, type: "new", spam: false },
-        { code: "+967", flag: "🇾🇪", name: "Йемен", desc: "новорег/авторег/саморег", price: 90, type: "new", spam: false },
-        { code: "+27", flag: "🇿🇦", name: "ЮАР", desc: "отлега 1-5 лет", price: 249, type: "otliga", spam: false },
-        { code: "+226", flag: "🇧🇫", name: "Буркина-Фасо", desc: "новорег/авторег/саморег", price: 90, type: "new", spam: false },
-        { code: "+252", flag: "🇸🇴", name: "Сомали", desc: "новорег/авторег/саморег", price: 90, type: "new", spam: false },
-        { code: "+962", flag: "🇯🇴", name: "Иордания", desc: "новорег/авторег/саморег", price: 90, type: "new", spam: false },
-        { code: "+256", flag: "🇺🇬", name: "Уганда", desc: "новорег/авторег/саморег", price: 90, type: "new", spam: false },
-        { code: "+84", flag: "🇻🇳", name: "Вьетнам", desc: "новорег/авторег/саморег", price: 90, type: "new", spam: false },
-        { code: "+93", flag: "🇦🇫", name: "Афганистан", desc: "новорег/авторег/саморег", price: 90, type: "new", spam: false },
-        { code: "+223", flag: "🇲🇱", name: "Мали", desc: "новорег/авторег/саморег", price: 90, type: "new", spam: false },
-        { code: "+63", flag: "🇵🇭", name: "Филиппины", desc: "новорег/авторег/саморег", price: 90, type: "new", spam: false },
-        { code: "+237", flag: "🇨🇲", name: "Камерун", desc: "новорег/авторег/саморег", price: 90, type: "new", spam: false },
-        { code: "+225", flag: "🇨🇮", name: "Кот-д'Ивуар", desc: "авторег/саморег", price: 90, type: "auto", spam: false },
-        { code: "+213", flag: "🇩🇿", name: "Алжир", desc: "авторег/саморег/новорег", price: 90, type: "auto", spam: false },
-        { code: "+976", flag: "🇲🇳", name: "Монголия", desc: "новорег/авторег/саморег", price: 90, type: "new", spam: false },
-        { code: "+977", flag: "🇳🇵", name: "Непал", desc: "новорег/саморег/авторег", price: 90, type: "new", spam: false },
-        { code: "+998", flag: "🇺🇿", name: "Узбекистан", desc: "без спамблока", price: 199, type: "otliga", spam: false },
-        { code: "+77", flag: "🇰🇿", name: "Казахстан", desc: "отлега 30 дней — 5 лет", price: 150, type: "otliga", spam: false },
-        { code: "+964", flag: "🇮🇶", name: "Ирак", desc: "отлега до года", price: 90, type: "otliga", spam: false },
-        { code: "+880", flag: "🇧🇩", name: "Бангладеш", desc: "отлега до 5 лет", price: 79, type: "otliga", spam: false },
-        { code: "+91", flag: "🇮🇳", name: "Индия", desc: "отлега до 5 лет", price: 40, type: "otliga", spam: false },
-        { code: "+49", flag: "🇩🇪", name: "Германия", desc: "отлега до 5 лет", price: 90, type: "otliga", spam: false },
-        { code: "+7", flag: "🇷🇺", name: "Россия", desc: "отлега до 5 лет", price: 250, type: "otliga", spam: false },
-        { code: "+39", flag: "🇮🇹", name: "Италия", desc: "отлега до 5 лет", price: 90, type: "otliga", spam: false },
-        { code: "+48", flag: "🇵🇱", name: "Польша", desc: "отлега до 5 лет", price: 90, type: "otliga", spam: false },
-        { code: "+33", flag: "🇫🇷", name: "Франция", desc: "отлега до 5 лет", price: 90, type: "otliga", spam: false },
-        { code: "+380", flag: "🇺🇦", name: "Украина", desc: "отлега до 5 лет", price: 299, type: "otliga", spam: false },
-        { code: "+31", flag: "🇳🇱", name: "Нидерланды", desc: "авто, 12 часов", price: 229, type: "auto", spam: false },
-        { code: "+372", flag: "🇪🇪", name: "Эстония", desc: "авто, 1 день", price: 199, type: "auto", spam: false },
-        { code: "+98", flag: "🇮🇷", name: "Иран", desc: "авто, 12 часов", price: 169, type: "auto", spam: false },
-        { code: "+593", flag: "🇪🇨", name: "Эквадор", desc: "авто, 2 часа", price: 85, type: "auto", spam: false },
-        { code: "+44", flag: "🇬🇧", name: "Великобритания", desc: "авто", price: 159, type: "auto", spam: false }
+        { code: "+1", flag: "🇺🇸", name: "США", base: 49, types: ["отлега"], spam: false },
+        { code: "+1", flag: "🇺🇸", name: "США (спам)", base: 37, types: ["отлега"], spam: true },
+        { code: "+52", flag: "🇲🇽", name: "Мексика", base: 90, types: ["новорег", "авторег", "саморег"], spam: false },
+        { code: "+57", flag: "🇨🇴", name: "Колумбия", base: 80, types: ["новорег", "авторег", "саморег"], spam: false },
+        { code: "+62", flag: "🇮🇩", name: "Индонезия", base: 80, types: ["новорег", "авторег", "саморег"], spam: false },
+        { code: "+95", flag: "🇲🇲", name: "Мьянма", base: 35, types: ["новорег", "авторег", "саморег"], spam: false },
+        { code: "+233", flag: "🇬🇭", name: "Гана", base: 60, types: ["новорег", "авторег", "саморег"], spam: false },
+        { code: "+228", flag: "🇹🇬", name: "Того", base: 90, types: ["новорег", "авторег", "саморег"], spam: false },
+        { code: "+222", flag: "🇲🇷", name: "Мавритания", base: 299, types: ["новорег", "авторег", "саморег"], spam: false },
+        { code: "+234", flag: "🇳🇬", name: "Нигерия", base: 70, types: ["новорег", "авторег", "саморег"], spam: false },
+        { code: "+20", flag: "🇪🇬", name: "Египет", base: 90, types: ["новорег", "авторег", "саморег"], spam: false },
+        { code: "+58", flag: "🇻🇪", name: "Венесуэла", base: 90, types: ["новорег", "авторег", "саморег"], spam: false },
+        { code: "+963", flag: "🇸🇾", name: "Сирия", base: 90, types: ["новорег", "авторег", "саморег"], spam: false },
+        { code: "+251", flag: "🇪🇹", name: "Эфиопия", base: 90, types: ["авторег", "саморег"], spam: false },
+        { code: "+60", flag: "🇲🇾", name: "Малайзия", base: 90, types: ["авторег", "саморег"], spam: false },
+        { code: "+51", flag: "🇵🇪", name: "Перу", base: 90, types: ["авторег", "саморег"], spam: false },
+        { code: "+90", flag: "🇹🇷", name: "Турция", base: 90, types: ["новорег", "авторег", "саморег"], spam: false },
+        { code: "+966", flag: "🇸🇦", name: "Саудовская Аравия", base: 90, types: ["новорег", "авторег", "саморег"], spam: false },
+        { code: "+254", flag: "🇰🇪", name: "Кения", base: 90, types: ["новорег", "авторег", "саморег"], spam: false },
+        { code: "+961", flag: "🇱🇧", name: "Ливан", base: 90, types: ["новорег", "авторег", "саморег"], spam: false },
+        { code: "+967", flag: "🇾🇪", name: "Йемен", base: 90, types: ["новорег", "авторег", "саморег"], spam: false },
+        { code: "+27", flag: "🇿🇦", name: "ЮАР", base: 90, types: ["новорег", "авторег", "саморег"], spam: false },
+        { code: "+27", flag: "🇿🇦", name: "ЮАР (отлега)", base: 249, types: ["отлега"], spam: false },
+        { code: "+226", flag: "🇧🇫", name: "Буркина-Фасо", base: 90, types: ["новорег", "авторег", "саморег"], spam: false },
+        { code: "+252", flag: "🇸🇴", name: "Сомали", base: 90, types: ["новорег", "авторег", "саморег"], spam: false },
+        { code: "+962", flag: "🇯🇴", name: "Иордания", base: 90, types: ["новорег", "авторег", "саморег"], spam: false },
+        { code: "+256", flag: "🇺🇬", name: "Уганда", base: 90, types: ["новорег", "авторег", "саморег"], spam: false },
+        { code: "+84", flag: "🇻🇳", name: "Вьетнам", base: 90, types: ["новорег", "авторег", "саморег"], spam: false },
+        { code: "+93", flag: "🇦🇫", name: "Афганистан", base: 90, types: ["новорег", "авторег", "саморег"], spam: false },
+        { code: "+223", flag: "🇲🇱", name: "Мали", base: 90, types: ["новорег", "авторег", "саморег"], spam: false },
+        { code: "+63", flag: "🇵🇭", name: "Филиппины", base: 90, types: ["новорег", "авторег", "саморег"], spam: false },
+        { code: "+237", flag: "🇨🇲", name: "Камерун", base: 90, types: ["новорег", "авторег", "саморег"], spam: false },
+        { code: "+225", flag: "🇨🇮", name: "Кот-д'Ивуар", base: 90, types: ["авторег", "саморег"], spam: false },
+        { code: "+213", flag: "🇩🇿", name: "Алжир", base: 90, types: ["авторег", "саморег", "новорег"], spam: false },
+        { code: "+976", flag: "🇲🇳", name: "Монголия", base: 90, types: ["новорег", "авторег", "саморег"], spam: false },
+        { code: "+977", flag: "🇳🇵", name: "Непал", base: 90, types: ["новорег", "саморег", "авторег"], spam: false },
+        { code: "+998", flag: "🇺🇿", name: "Узбекистан", base: 199, types: ["отлега"], spam: false },
+        { code: "+77", flag: "🇰🇿", name: "Казахстан", base: 150, types: ["отлега"], spam: false },
+        { code: "+964", flag: "🇮🇶", name: "Ирак", base: 90, types: ["отлега"], spam: false },
+        { code: "+880", flag: "🇧🇩", name: "Бангладеш", base: 79, types: ["отлега"], spam: false },
+        { code: "+91", flag: "🇮🇳", name: "Индия", base: 40, types: ["отлега"], spam: false },
+        { code: "+49", flag: "🇩🇪", name: "Германия", base: 90, types: ["отлега"], spam: false },
+        { code: "+49", flag: "🇩🇪", name: "Германия (авто)", base: 179, types: ["авторег"], spam: false },
+        { code: "+7", flag: "🇷🇺", name: "Россия", base: 250, types: ["отлега"], spam: false },
+        { code: "+39", flag: "🇮🇹", name: "Италия", base: 90, types: ["отлега"], spam: false },
+        { code: "+48", flag: "🇵🇱", name: "Польша", base: 90, types: ["отлега"], spam: false },
+        { code: "+48", flag: "🇵🇱", name: "Польша (авто)", base: 149, types: ["авторег"], spam: false },
+        { code: "+33", flag: "🇫🇷", name: "Франция", base: 90, types: ["отлега"], spam: false },
+        { code: "+380", flag: "🇺🇦", name: "Украина", base: 299, types: ["отлега"], spam: false },
+        { code: "+31", flag: "🇳🇱", name: "Нидерланды", base: 229, types: ["авторег"], spam: false },
+        { code: "+372", flag: "🇪🇪", name: "Эстония", base: 199, types: ["авторег"], spam: false },
+        { code: "+98", flag: "🇮🇷", name: "Иран", base: 169, types: ["авторег"], spam: false },
+        { code: "+593", flag: "🇪🇨", name: "Эквадор", base: 85, types: ["авторег"], spam: false },
+        { code: "+44", flag: "🇬🇧", name: "Великобритания", base: 159, types: ["авторег"], spam: false }
     ];
+
+    // ============================================================
+    // ФУНКЦИИ
+    // ============================================================
+    function getPrice(item) {
+        if (item.types.includes("саморег")) {
+            return item.base + 50;
+        }
+        return item.base;
+    }
 
     function renderCatalog(filter = 'all', search = '') {
         const container = document.getElementById('catalog');
         let filtered = countries;
 
         if (filter !== 'all') {
-            if (filter === 'spam') {
-                filtered = filtered.filter(c => c.spam === true);
-            } else {
-                filtered = filtered.filter(c => c.type === filter);
-            }
+            filtered = filtered.filter(c => c.types.includes(filter));
         }
 
         if (search) {
             const q = search.toLowerCase();
-            filtered = filtered.filter(c => 
-                c.name.toLowerCase().includes(q) || 
+            filtered = filtered.filter(c =>
+                c.name.toLowerCase().includes(q) ||
                 c.code.includes(q)
             );
         }
@@ -313,20 +314,28 @@
 
         let html = '';
         filtered.forEach(c => {
+            const price = getPrice(c);
             const spamLabel = c.spam ? '🚫 Спам-блок' : '✅ Без спама';
+            const typeLabels = c.types.map(t => {
+                if (t === 'саморег') {
+                    return `<span class="self-badge">${t} +50₽</span>`;
+                }
+                return `<span>${t}</span>`;
+            }).join(' ');
+
             html += `
                 <div class="card">
                     <div class="card-header">
                         <span class="flag">${c.flag}</span>
                         <span class="code">${c.code}</span>
-                        <span class="price">${c.price} ₽</span>
+                        <span class="price">${price} ₽</span>
                     </div>
-                    <div class="card-desc">${c.desc}</div>
+                    <div class="card-desc">${c.name}</div>
                     <div class="card-meta">
                         <span>${spamLabel}</span>
-                        <span>${c.type === 'new' ? '🆕 Новорег' : c.type === 'auto' ? '🤖 Авторег' : c.type === 'otliga' ? '⏳ Отлега' : '📱 Саморег'}</span>
+                        ${typeLabels}
                     </div>
-                    <button class="btn-buy" onclick="addToCart('${c.code}', '${c.name}', ${c.price})">🛒 Купить</button>
+                    <button class="btn-buy" onclick="addToCart('${c.code}', '${c.name}', ${price})">🛒 Купить</button>
                 </div>
             `;
         });
@@ -338,6 +347,24 @@
         document.getElementById('cartCount').textContent = cart.length;
         showToast(`✅ ${name} (${code}) добавлен в корзину`);
         tg.HapticFeedback.impactOccurred('light');
+        
+        // Отправляем корзину в бота
+        tg.sendData(JSON.stringify({ action: 'update_cart', cart: cart }));
+    }
+
+    function showCart() {
+        if (cart.length === 0) {
+            tg.showAlert('🛍 Корзина пуста');
+            return;
+        }
+        let text = '🛍 Ваша корзина:\n\n';
+        let total = 0;
+        cart.forEach((item, i) => {
+            text += `${i+1}. ${item.name} (${item.code}) — ${item.price} ₽\n`;
+            total += item.price;
+        });
+        text += `\n💰 Итого: ${total} ₽`;
+        tg.showAlert(text);
     }
 
     function showToast(msg) {
@@ -345,13 +372,6 @@
         el.textContent = msg;
         el.classList.add('show');
         setTimeout(() => el.classList.remove('show'), 2500);
-    }
-
-    function filterAll() {
-        currentFilter = 'all';
-        document.querySelectorAll('.filter-row button').forEach(b => b.classList.remove('active'));
-        document.querySelector('[data-filter="all"]').classList.add('active');
-        renderCatalog('all', document.getElementById('searchInput').value);
     }
 
     document.getElementById('filterRow').addEventListener('click', (e) => {
@@ -367,11 +387,9 @@
         renderCatalog(currentFilter, e.target.value);
     });
 
-    function openProfile() {
-        tg.showAlert('👤 Ваш профиль\n\nКорзина: ' + cart.length + ' товаров\nСумма: ' + cart.reduce((s, i) => s + i.price, 0) + ' ₽');
-    }
-
-    // Инициализация
+    // ============================================================
+    // ЗАПУСК
+    // ============================================================
     renderCatalog('all', '');
 </script>
 
