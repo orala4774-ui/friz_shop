@@ -326,6 +326,7 @@
     // ФУНКЦИИ
     // ============================================================
     function getPrice(item) {
+        // Если среди типов есть "саморег" — прибавляем 50 ₽
         if (item.types.includes("саморег")) {
             return item.base + 50;
         }
@@ -358,6 +359,7 @@
             const price = getPrice(c);
             const spamLabel = c.spam ? '🚫 Спам-блок' : '✅ Без спама';
             
+            // Формируем метки типов с ценой для саморегов
             const typeLabels = c.types.map(t => {
                 if (t === 'саморег') {
                     return `<span class="self-badge">${t} (+50₽)</span>`;
