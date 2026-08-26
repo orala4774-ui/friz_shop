@@ -263,9 +263,9 @@
     let currentFilter = 'all';
 
     // ============================================================
-    // ДАННЫЕ — полный каталог (цены с учётом +50 для саморегов)
+    // КАТАЛОГ — КАЖДЫЙ ТИП ЭТО ОТДЕЛЬНЫЙ ЛОТ
     // ============================================================
-    const countries = [
+    const rawCountries = [
         { code: "+1", flag: "🇺🇸", name: "США", base: 49, types: ["отлега"], spam: false },
         { code: "+1", flag: "🇺🇸", name: "США (спам)", base: 37, types: ["отлега"], spam: true },
         { code: "+52", flag: "🇲🇽", name: "Мексика", base: 90, types: ["новорег", "авторег", "саморег"], spam: false },
@@ -323,22 +323,35 @@
     ];
 
     // ============================================================
+    // РАЗВОРАЧИВАЕМ В ОТДЕЛЬНЫЕ ЛОТЫ ПО ТИПАМ
+    // ============================================================
+    const countries = [];
+    rawCountries.forEach(item => {
+        item.types.forEach(type => {
+            let price = item.base;
+            if (type === 'саморег') {
+                price = item.base + 50;
+            }
+            countries.push({
+                code: item.code,
+                flag: item.flag,
+                name: item.name,
+                type: type,
+                price: price,
+                spam: item.spam
+            });
+        });
+    });
+
+    // ============================================================
     // ФУНКЦИИ
     // ============================================================
-    function getPrice(item) {
-        // Если среди типов есть "саморег" — прибавляем 50 ₽
-        if (item.types.includes("саморег")) {
-            return item.base + 50;
-        }
-        return item.base;
-    }
-
     function renderCatalog(filter = 'all', search = '') {
         const container = document.getElementById('catalog');
         let filtered = countries;
 
         if (filter !== 'all') {
-            filtered = filtered.filter(c => c.types.includes(filter));
+            filtered = filtered.filter(c => c.type === filter);
         }
 
         if (search) {
@@ -356,30 +369,24 @@
 
         let html = '';
         filtered.forEach(c => {
-            const price = getPrice(c);
             const spamLabel = c.spam ? '🚫 Спам-блок' : '✅ Без спама';
-            
-            // Формируем метки типов с ценой для саморегов
-            const typeLabels = c.types.map(t => {
-                if (t === 'саморег') {
-                    return `<span class="self-badge">${t} (+50₽)</span>`;
-                }
-                return `<span>${t}</span>`;
-            }).join(' ');
+            const typeLabel = c.type === 'саморег'
+                ? `<span class="self-badge">${c.type} (+50₽)</span>`
+                : `<span>${c.type}</span>`;
 
             html += `
                 <div class="card">
                     <div class="card-header">
                         <span class="flag">${c.flag}</span>
                         <span class="code">${c.code}</span>
-                        <span class="price">${price} ₽</span>
+                        <span class="price">${c.price} ₽</span>
                     </div>
                     <div class="card-desc">${c.name}</div>
                     <div class="card-meta">
                         <span>${spamLabel}</span>
-                        ${typeLabels}
+                        ${typeLabel}
                     </div>
-                    <button class="btn-buy" onclick="addToCart('${c.code}', '${c.name}', ${price})">🛒 Купить</button>
+                    <button class="btn-buy" onclick="addToCart('${c.code}', '${c.name} (${c.type})', ${c.price})">🛒 Купить</button>
                 </div>
             `;
         });
@@ -389,10 +396,8 @@
     function addToCart(code, name, price) {
         cart.push({ code, name, price });
         document.getElementById('cartCount').textContent = cart.length;
-        showToast(`✅ ${name} (${code}) добавлен в корзину`);
+        showToast(`✅ ${name} добавлен в корзину`);
         tg.HapticFeedback.impactOccurred('light');
-        
-        // Отправляем корзину в бота
         tg.sendData(JSON.stringify({ action: 'update_cart', cart: cart }));
     }
 
