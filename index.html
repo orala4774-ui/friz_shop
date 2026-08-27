@@ -6,6 +6,7 @@
     <title>FRIZ SHOP</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
+        /* ========== БАЗА ========== */
         * {
             margin: 0;
             padding: 0;
@@ -19,6 +20,7 @@
             min-height: 100vh;
         }
 
+        /* ========== ШАПКА ========== */
         .header {
             display: flex;
             justify-content: space-between;
@@ -27,12 +29,17 @@
             padding-bottom: 12px;
             border-bottom: 1px solid #2a0a0a;
         }
-        .header h1 {
+        .header .logo {
             font-size: 22px;
             font-weight: 700;
             background: linear-gradient(135deg, #cc3333, #ff4444);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
+        }
+        .header .right {
+            display: flex;
+            align-items: center;
+            gap: 14px;
         }
         .header .cart-badge {
             background: #cc3333;
@@ -43,10 +50,162 @@
             font-weight: 600;
             cursor: pointer;
         }
-        .header .cart-badge:hover {
-            background: #aa2222;
+        .header .avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #cc3333;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            cursor: pointer;
+            border: 2px solid #cc3333;
+            transition: 0.2s;
+            font-weight: 600;
+            color: #fff;
+            text-transform: uppercase;
+        }
+        .header .avatar:hover {
+            border-color: #ff4444;
         }
 
+        /* ========== ПРОФИЛЬ ========== */
+        .profile-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(6px);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+        .profile-overlay.open {
+            display: flex;
+        }
+        .profile-card {
+            background: #1a0a0a;
+            border-radius: 28px;
+            padding: 32px 28px;
+            width: 90%;
+            max-width: 400px;
+            border: 1px solid #2a0a0a;
+            text-align: center;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.9);
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+        .profile-card .big-avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: #cc3333;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 40px;
+            margin: 0 auto 12px;
+            font-weight: 600;
+            color: #fff;
+            text-transform: uppercase;
+        }
+        .profile-card .name {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+        .profile-card .id {
+            font-size: 14px;
+            color: #888;
+            margin-bottom: 16px;
+        }
+        .profile-card .balance {
+            background: #120808;
+            padding: 12px;
+            border-radius: 16px;
+            border: 1px solid #2a0a0a;
+            margin-bottom: 20px;
+        }
+        .profile-card .balance .label {
+            font-size: 13px;
+            color: #888;
+        }
+        .profile-card .balance .amount {
+            font-size: 26px;
+            font-weight: 700;
+            color: #ff4444;
+        }
+        .profile-card .btn-close {
+            background: #cc3333;
+            border: none;
+            color: #fff;
+            padding: 12px 24px;
+            border-radius: 14px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 8px;
+            transition: 0.2s;
+        }
+        .profile-card .btn-close:hover {
+            background: #aa2222;
+        }
+        .profile-card .btn-secondary {
+            background: #2a2a2a;
+        }
+        .profile-card .btn-secondary:hover {
+            background: #3a3a3a;
+        }
+        .profile-card .btn-stars {
+            background: #f5b700;
+            color: #000;
+        }
+        .profile-card .btn-stars:hover {
+            background: #e0a500;
+        }
+
+        /* ========== ПОПОЛНЕНИЕ ========== */
+        .topup-input {
+            width: 100%;
+            padding: 12px 16px;
+            background: #1a0a0a;
+            border: 1px solid #331111;
+            border-radius: 12px;
+            color: #e0e0e0;
+            font-size: 16px;
+            outline: none;
+            margin-bottom: 16px;
+        }
+        .topup-input:focus {
+            border-color: #cc3333;
+        }
+        .topup-status {
+            margin-top: 12px;
+            font-size: 14px;
+            color: #ff6b6b;
+            white-space: pre-line;
+            text-align: left;
+            background: #120808;
+            padding: 12px;
+            border-radius: 12px;
+            border: 1px solid #1f0c0c;
+        }
+        .topup-status.success {
+            color: #6bff6b;
+        }
+        .topup-status.loading {
+            color: #ffd93d;
+        }
+        .topup-status.stars {
+            color: #f5b700;
+        }
+
+        /* ========== ПОИСК И ФИЛЬТРЫ ========== */
         .search-input {
             width: 100%;
             padding: 12px 16px;
@@ -94,6 +253,7 @@
             color: #fff;
         }
 
+        /* ========== КАРТОЧКИ ========== */
         .card {
             background: #120808;
             border-radius: 16px;
@@ -180,6 +340,7 @@
             font-size: 16px;
         }
 
+        /* ========== TOAST ========== */
         .toast {
             position: fixed;
             top: 20px;
@@ -199,6 +360,7 @@
             opacity: 1;
         }
 
+        /* ========== НИЖНЯЯ НАВИГАЦИЯ ========== */
         .bottom-nav {
             position: fixed;
             bottom: 0;
@@ -207,240 +369,386 @@
             background: #0a0a0a;
             border-top: 1px solid #1a0a0a;
             display: flex;
-            justify-content: center;
+            justify-content: space-around;
             padding: 10px 0 14px 0;
             backdrop-filter: blur(10px);
         }
         .bottom-nav a {
-            color: #cc3333;
+            color: #666;
             text-decoration: none;
-            font-size: 14px;
-            font-weight: 600;
+            font-size: 12px;
             display: flex;
+            flex-direction: column;
             align-items: center;
-            gap: 6px;
+            gap: 2px;
             transition: 0.2s;
+            cursor: pointer;
+        }
+        .bottom-nav a.active {
+            color: #cc3333;
         }
         .bottom-nav a .icon {
             font-size: 22px;
-        }
-        .bottom-nav a:hover {
-            color: #ff4444;
         }
     </style>
 </head>
 <body>
 
-<div class="toast" id="toast">✅ Добавлено в корзину</div>
+    <!-- TOAST -->
+    <div class="toast" id="toast">✅ Добавлено в корзину</div>
 
-<div class="header">
-    <h1>🛒 FRIZ SHOP</h1>
-    <div class="cart-badge" id="cartCount" onclick="showCart()">0</div>
-</div>
+    <!-- ПРОФИЛЬ -->
+    <div class="profile-overlay" id="profileOverlay">
+        <div class="profile-card">
+            <div class="big-avatar" id="profileAvatar">👤</div>
+            <div class="name" id="profileName">Пользователь</div>
+            <div class="id" id="profileId">ID: 123456789</div>
+            <div class="balance">
+                <div class="label">💰 Баланс</div>
+                <div class="amount" id="profileBalance">0 ₽</div>
+            </div>
+            <button class="btn-close" onclick="closeProfile()">✖ Закрыть</button>
+        </div>
+    </div>
 
-<input class="search-input" id="searchInput" placeholder="🔍 Поиск по стране или коду..." />
+    <!-- ПОПОЛНЕНИЕ БАЛАНСА -->
+    <div class="profile-overlay" id="topupOverlay">
+        <div class="profile-card">
+            <div class="big-avatar">💳</div>
+            <div class="name">Пополнить баланс</div>
+            <div class="id" style="font-size:14px; color:#888; margin-bottom:16px;">Выберите способ оплаты</div>
 
-<div class="filter-row" id="filterRow">
-    <button class="active" data-filter="all">Все</button>
-    <button data-filter="новорег">🆕 Новорег</button>
-    <button data-filter="авторег">🤖 Авторег</button>
-    <button data-filter="саморег">📱 Саморег</button>
-    <button data-filter="отлега">⏳ Отлега</button>
-</div>
+            <div class="balance">
+                <div class="label">💰 Текущий баланс</div>
+                <div class="amount" id="topupBalance">0 ₽</div>
+            </div>
 
-<div id="catalog"></div>
+            <input type="number" class="topup-input" id="topupAmount" value="100" min="10" step="10" placeholder="Сумма пополнения (₽)">
 
-<div class="bottom-nav">
-    <a href="#" onclick="showCart()"><span class="icon">🛍</span> Корзина</a>
-</div>
+            <button class="btn-close btn-stars" style="margin-bottom:10px;" onclick="payStars()">
+                ⭐ Оплатить звёздами (1 ⭐ = 1 ₽)
+            </button>
+            <button class="btn-close" style="margin-bottom:10px; background:#cc3333;" onclick="paySBP()">
+                🇷🇺 Оплатить по СБП
+            </button>
+            <button class="btn-close btn-secondary" style="margin-bottom:10px;" onclick="payCard()">
+                💳 Оплатить картой
+            </button>
+            <button class="btn-close btn-secondary" onclick="closeTopup()">
+                ✖ Закрыть
+            </button>
 
-<script>
-    const tg = window.Telegram.WebApp;
-    tg.ready();
-    tg.expand();
+            <div class="topup-status" id="topupStatus"></div>
+        </div>
+    </div>
 
-    let cart = [];
-    let currentFilter = 'all';
+    <!-- ШАПКА -->
+    <div class="header">
+        <div class="logo">🛒 FRIZ SHOP</div>
+        <div class="right">
+            <div class="cart-badge" id="cartCount" onclick="showCart()">0</div>
+            <div class="avatar" id="avatarBtn" onclick="openProfile()">👤</div>
+        </div>
+    </div>
 
-    // ============================================================
-    // КАТАЛОГ — КАЖДЫЙ ТИП ЭТО ОТДЕЛЬНЫЙ ЛОТ
-    // ============================================================
-    const rawCountries = [
-        { code: "+1", flag: "🇺🇸", name: "США", base: 49, types: ["отлега"], spam: false },
-        { code: "+1", flag: "🇺🇸", name: "США (спам)", base: 37, types: ["отлега"], spam: true },
-        { code: "+52", flag: "🇲🇽", name: "Мексика", base: 90, types: ["новорег", "авторег", "саморег"], spam: false },
-        { code: "+57", flag: "🇨🇴", name: "Колумбия", base: 80, types: ["новорег", "авторег", "саморег"], spam: false },
-        { code: "+62", flag: "🇮🇩", name: "Индонезия", base: 80, types: ["новорег", "авторег", "саморег"], spam: false },
-        { code: "+95", flag: "🇲🇲", name: "Мьянма", base: 35, types: ["новорег", "авторег", "саморег"], spam: false },
-        { code: "+233", flag: "🇬🇭", name: "Гана", base: 60, types: ["новорег", "авторег", "саморег"], spam: false },
-        { code: "+228", flag: "🇹🇬", name: "Того", base: 90, types: ["новорег", "авторег", "саморег"], spam: false },
-        { code: "+222", flag: "🇲🇷", name: "Мавритания", base: 299, types: ["новорег", "авторег", "саморег"], spam: false },
-        { code: "+234", flag: "🇳🇬", name: "Нигерия", base: 70, types: ["новорег", "авторег", "саморег"], spam: false },
-        { code: "+20", flag: "🇪🇬", name: "Египет", base: 90, types: ["новорег", "авторег", "саморег"], spam: false },
-        { code: "+58", flag: "🇻🇪", name: "Венесуэла", base: 90, types: ["новорег", "авторег", "саморег"], spam: false },
-        { code: "+963", flag: "🇸🇾", name: "Сирия", base: 90, types: ["новорег", "авторег", "саморег"], spam: false },
-        { code: "+251", flag: "🇪🇹", name: "Эфиопия", base: 90, types: ["авторег", "саморег"], spam: false },
-        { code: "+60", flag: "🇲🇾", name: "Малайзия", base: 90, types: ["авторег", "саморег"], spam: false },
-        { code: "+51", flag: "🇵🇪", name: "Перу", base: 90, types: ["авторег", "саморег"], spam: false },
-        { code: "+90", flag: "🇹🇷", name: "Турция", base: 90, types: ["новорег", "авторег", "саморег"], spam: false },
-        { code: "+966", flag: "🇸🇦", name: "Саудовская Аравия", base: 90, types: ["новорег", "авторег", "саморег"], spam: false },
-        { code: "+254", flag: "🇰🇪", name: "Кения", base: 90, types: ["новорег", "авторег", "саморег"], spam: false },
-        { code: "+961", flag: "🇱🇧", name: "Ливан", base: 90, types: ["новорег", "авторег", "саморег"], spam: false },
-        { code: "+967", flag: "🇾🇪", name: "Йемен", base: 90, types: ["новорег", "авторег", "саморег"], spam: false },
-        { code: "+27", flag: "🇿🇦", name: "ЮАР", base: 90, types: ["новорег", "авторег", "саморег"], spam: false },
-        { code: "+27", flag: "🇿🇦", name: "ЮАР (отлега)", base: 249, types: ["отлега"], spam: false },
-        { code: "+226", flag: "🇧🇫", name: "Буркина-Фасо", base: 90, types: ["новорег", "авторег", "саморег"], spam: false },
-        { code: "+252", flag: "🇸🇴", name: "Сомали", base: 90, types: ["новорег", "авторег", "саморег"], spam: false },
-        { code: "+962", flag: "🇯🇴", name: "Иордания", base: 90, types: ["новорег", "авторег", "саморег"], spam: false },
-        { code: "+256", flag: "🇺🇬", name: "Уганда", base: 90, types: ["новорег", "авторег", "саморег"], spam: false },
-        { code: "+84", flag: "🇻🇳", name: "Вьетнам", base: 90, types: ["новорег", "авторег", "саморег"], spam: false },
-        { code: "+93", flag: "🇦🇫", name: "Афганистан", base: 90, types: ["новорег", "авторег", "саморег"], spam: false },
-        { code: "+223", flag: "🇲🇱", name: "Мали", base: 90, types: ["новорег", "авторег", "саморег"], spam: false },
-        { code: "+63", flag: "🇵🇭", name: "Филиппины", base: 90, types: ["новорег", "авторег", "саморег"], spam: false },
-        { code: "+237", flag: "🇨🇲", name: "Камерун", base: 90, types: ["новорег", "авторег", "саморег"], spam: false },
-        { code: "+225", flag: "🇨🇮", name: "Кот-д'Ивуар", base: 90, types: ["авторег", "саморег"], spam: false },
-        { code: "+213", flag: "🇩🇿", name: "Алжир", base: 90, types: ["авторег", "саморег", "новорег"], spam: false },
-        { code: "+976", flag: "🇲🇳", name: "Монголия", base: 90, types: ["новорег", "авторег", "саморег"], spam: false },
-        { code: "+977", flag: "🇳🇵", name: "Непал", base: 90, types: ["новорег", "саморег", "авторег"], spam: false },
-        { code: "+998", flag: "🇺🇿", name: "Узбекистан", base: 199, types: ["отлега"], spam: false },
-        { code: "+77", flag: "🇰🇿", name: "Казахстан", base: 150, types: ["отлега"], spam: false },
-        { code: "+964", flag: "🇮🇶", name: "Ирак", base: 90, types: ["отлега"], spam: false },
-        { code: "+880", flag: "🇧🇩", name: "Бангладеш", base: 79, types: ["отлега"], spam: false },
-        { code: "+91", flag: "🇮🇳", name: "Индия", base: 40, types: ["отлега"], spam: false },
-        { code: "+49", flag: "🇩🇪", name: "Германия", base: 90, types: ["отлега"], spam: false },
-        { code: "+49", flag: "🇩🇪", name: "Германия (авто)", base: 179, types: ["авторег"], spam: false },
-        { code: "+7", flag: "🇷🇺", name: "Россия", base: 250, types: ["отлега"], spam: false },
-        { code: "+39", flag: "🇮🇹", name: "Италия", base: 90, types: ["отлега"], spam: false },
-        { code: "+48", flag: "🇵🇱", name: "Польша", base: 90, types: ["отлега"], spam: false },
-        { code: "+48", flag: "🇵🇱", name: "Польша (авто)", base: 149, types: ["авторег"], spam: false },
-        { code: "+33", flag: "🇫🇷", name: "Франция", base: 90, types: ["отлега"], spam: false },
-        { code: "+380", flag: "🇺🇦", name: "Украина", base: 299, types: ["отлега"], spam: false },
-        { code: "+31", flag: "🇳🇱", name: "Нидерланды", base: 229, types: ["авторег"], spam: false },
-        { code: "+372", flag: "🇪🇪", name: "Эстония", base: 199, types: ["авторег"], spam: false },
-        { code: "+98", flag: "🇮🇷", name: "Иран", base: 169, types: ["авторег"], spam: false },
-        { code: "+593", flag: "🇪🇨", name: "Эквадор", base: 85, types: ["авторег"], spam: false },
-        { code: "+44", flag: "🇬🇧", name: "Великобритания", base: 159, types: ["авторег"], spam: false }
-    ];
+    <!-- ПОИСК -->
+    <input class="search-input" id="searchInput" placeholder="🔍 Поиск по стране или коду..." />
 
-    // ============================================================
-    // РАЗВОРАЧИВАЕМ В ОТДЕЛЬНЫЕ ЛОТЫ ПО ТИПАМ
-    // ============================================================
-    const countries = [];
-    rawCountries.forEach(item => {
-        item.types.forEach(type => {
-            let price = item.base;
-            if (type === 'саморег') {
-                price = item.base + 50;
-            }
-            countries.push({
-                code: item.code,
-                flag: item.flag,
-                name: item.name,
-                type: type,
-                price: price,
-                spam: item.spam
+    <!-- ФИЛЬТРЫ -->
+    <div class="filter-row" id="filterRow">
+        <button class="active" data-filter="all">Все</button>
+        <button data-filter="новорег">🆕 Новорег</button>
+        <button data-filter="авторег">🤖 Авторег</button>
+        <button data-filter="саморег">📱 Саморег</button>
+        <button data-filter="отлега">⏳ Отлега</button>
+    </div>
+
+    <!-- КАТАЛОГ -->
+    <div id="catalog"></div>
+
+    <!-- НИЖНЯЯ НАВИГАЦИЯ -->
+    <div class="bottom-nav">
+        <a href="#" class="active" onclick="filterAll()"><span class="icon">🏠</span> Каталог</a>
+        <a href="#" onclick="showCart()"><span class="icon">🛍</span> Корзина</a>
+        <a href="#" onclick="openTopup()"><span class="icon">💳</span> Пополнить</a>
+    </div>
+
+    <script>
+        const tg = window.Telegram.WebApp;
+        tg.ready();
+        tg.expand();
+
+        let cart = [];
+        let currentFilter = 'all';
+        let userBalance = 0;
+
+        // ============================================================
+        // ДАННЫЕ КАТАЛОГА
+        // ============================================================
+        const rawCountries = [
+            { code: "+1", flag: "🇺🇸", name: "США", base: 49, types: ["отлега"], spam: false },
+            { code: "+1", flag: "🇺🇸", name: "США (спам)", base: 37, types: ["отлега"], spam: true },
+            { code: "+52", flag: "🇲🇽", name: "Мексика", base: 90, types: ["новорег", "авторег", "саморег"], spam: false },
+            { code: "+57", flag: "🇨🇴", name: "Колумбия", base: 80, types: ["новорег", "авторег", "саморег"], spam: false },
+            { code: "+62", flag: "🇮🇩", name: "Индонезия", base: 80, types: ["новорег", "авторег", "саморег"], spam: false },
+            { code: "+95", flag: "🇲🇲", name: "Мьянма", base: 35, types: ["новорег", "авторег", "саморег"], spam: false },
+            { code: "+233", flag: "🇬🇭", name: "Гана", base: 60, types: ["новорег", "авторег", "саморег"], spam: false },
+            { code: "+228", flag: "🇹🇬", name: "Того", base: 90, types: ["новорег", "авторег", "саморег"], spam: false },
+            { code: "+222", flag: "🇲🇷", name: "Мавритания", base: 299, types: ["новорег", "авторег", "саморег"], spam: false },
+            { code: "+234", flag: "🇳🇬", name: "Нигерия", base: 70, types: ["новорег", "авторег", "саморег"], spam: false },
+            { code: "+20", flag: "🇪🇬", name: "Египет", base: 90, types: ["новорег", "авторег", "саморег"], spam: false },
+            { code: "+58", flag: "🇻🇪", name: "Венесуэла", base: 90, types: ["новорег", "авторег", "саморег"], spam: false },
+            { code: "+963", flag: "🇸🇾", name: "Сирия", base: 90, types: ["новорег", "авторег", "саморег"], spam: false },
+            { code: "+251", flag: "🇪🇹", name: "Эфиопия", base: 90, types: ["авторег", "саморег"], spam: false },
+            { code: "+60", flag: "🇲🇾", name: "Малайзия", base: 90, types: ["авторег", "саморег"], spam: false },
+            { code: "+51", flag: "🇵🇪", name: "Перу", base: 90, types: ["авторег", "саморег"], spam: false },
+            { code: "+90", flag: "🇹🇷", name: "Турция", base: 90, types: ["новорег", "авторег", "саморег"], spam: false },
+            { code: "+966", flag: "🇸🇦", name: "Саудовская Аравия", base: 90, types: ["новорег", "авторег", "саморег"], spam: false },
+            { code: "+254", flag: "🇰🇪", name: "Кения", base: 90, types: ["новорег", "авторег", "саморег"], spam: false },
+            { code: "+961", flag: "🇱🇧", name: "Ливан", base: 90, types: ["новорег", "авторег", "саморег"], spam: false },
+            { code: "+967", flag: "🇾🇪", name: "Йемен", base: 90, types: ["новорег", "авторег", "саморег"], spam: false },
+            { code: "+27", flag: "🇿🇦", name: "ЮАР", base: 90, types: ["новорег", "авторег", "саморег"], spam: false },
+            { code: "+27", flag: "🇿🇦", name: "ЮАР (отлега)", base: 249, types: ["отлега"], spam: false },
+            { code: "+226", flag: "🇧🇫", name: "Буркина-Фасо", base: 90, types: ["новорег", "авторег", "саморег"], spam: false },
+            { code: "+252", flag: "🇸🇴", name: "Сомали", base: 90, types: ["новорег", "авторег", "саморег"], spam: false },
+            { code: "+962", flag: "🇯🇴", name: "Иордания", base: 90, types: ["новорег", "авторег", "саморег"], spam: false },
+            { code: "+256", flag: "🇺🇬", name: "Уганда", base: 90, types: ["новорег", "авторег", "саморег"], spam: false },
+            { code: "+84", flag: "🇻🇳", name: "Вьетнам", base: 90, types: ["новорег", "авторег", "саморег"], spam: false },
+            { code: "+93", flag: "🇦🇫", name: "Афганистан", base: 90, types: ["новорег", "авторег", "саморег"], spam: false },
+            { code: "+223", flag: "🇲🇱", name: "Мали", base: 90, types: ["новорег", "авторег", "саморег"], spam: false },
+            { code: "+63", flag: "🇵🇭", name: "Филиппины", base: 90, types: ["новорег", "авторег", "саморег"], spam: false },
+            { code: "+237", flag: "🇨🇲", name: "Камерун", base: 90, types: ["новорег", "авторег", "саморег"], spam: false },
+            { code: "+225", flag: "🇨🇮", name: "Кот-д'Ивуар", base: 90, types: ["авторег", "саморег"], spam: false },
+            { code: "+213", flag: "🇩🇿", name: "Алжир", base: 90, types: ["авторег", "саморег", "новорег"], spam: false },
+            { code: "+976", flag: "🇲🇳", name: "Монголия", base: 90, types: ["новорег", "авторег", "саморег"], spam: false },
+            { code: "+977", flag: "🇳🇵", name: "Непал", base: 90, types: ["новорег", "саморег", "авторег"], spam: false },
+            { code: "+998", flag: "🇺🇿", name: "Узбекистан", base: 199, types: ["отлега"], spam: false },
+            { code: "+77", flag: "🇰🇿", name: "Казахстан", base: 150, types: ["отлега"], spam: false },
+            { code: "+964", flag: "🇮🇶", name: "Ирак", base: 90, types: ["отлега"], spam: false },
+            { code: "+880", flag: "🇧🇩", name: "Бангладеш", base: 79, types: ["отлега"], spam: false },
+            { code: "+91", flag: "🇮🇳", name: "Индия", base: 40, types: ["отлега"], spam: false },
+            { code: "+49", flag: "🇩🇪", name: "Германия", base: 90, types: ["отлега"], spam: false },
+            { code: "+49", flag: "🇩🇪", name: "Германия (авто)", base: 179, types: ["авторег"], spam: false },
+            { code: "+7", flag: "🇷🇺", name: "Россия", base: 250, types: ["отлега"], spam: false },
+            { code: "+39", flag: "🇮🇹", name: "Италия", base: 90, types: ["отлега"], spam: false },
+            { code: "+48", flag: "🇵🇱", name: "Польша", base: 90, types: ["отлега"], spam: false },
+            { code: "+48", flag: "🇵🇱", name: "Польша (авто)", base: 149, types: ["авторег"], spam: false },
+            { code: "+33", flag: "🇫🇷", name: "Франция", base: 90, types: ["отлега"], spam: false },
+            { code: "+380", flag: "🇺🇦", name: "Украина", base: 299, types: ["отлега"], spam: false },
+            { code: "+31", flag: "🇳🇱", name: "Нидерланды", base: 229, types: ["авторег"], spam: false },
+            { code: "+372", flag: "🇪🇪", name: "Эстония", base: 199, types: ["авторег"], spam: false },
+            { code: "+98", flag: "🇮🇷", name: "Иран", base: 169, types: ["авторег"], spam: false },
+            { code: "+593", flag: "🇪🇨", name: "Эквадор", base: 85, types: ["авторег"], spam: false },
+            { code: "+44", flag: "🇬🇧", name: "Великобритания", base: 159, types: ["авторег"], spam: false }
+        ];
+
+        // Разворачиваем в отдельные лоты
+        const countries = [];
+        rawCountries.forEach(item => {
+            item.types.forEach(type => {
+                let price = item.base;
+                if (type === 'саморег') price = item.base + 50;
+                countries.push({
+                    code: item.code,
+                    flag: item.flag,
+                    name: item.name,
+                    type: type,
+                    price: price,
+                    spam: item.spam
+                });
             });
         });
-    });
 
-    // ============================================================
-    // ФУНКЦИИ
-    // ============================================================
-    function renderCatalog(filter = 'all', search = '') {
-        const container = document.getElementById('catalog');
-        let filtered = countries;
+        // ============================================================
+        // ПРОФИЛЬ
+        // ============================================================
+        function openProfile() {
+            const user = tg.initDataUnsafe?.user;
+            const name = user?.first_name || 'Пользователь';
+            const id = user?.id || '—';
+            const avatar = name.charAt(0).toUpperCase() || '👤';
 
-        if (filter !== 'all') {
-            filtered = filtered.filter(c => c.type === filter);
+            document.getElementById('profileAvatar').textContent = avatar;
+            document.getElementById('profileName').textContent = name;
+            document.getElementById('profileId').textContent = `ID: ${id}`;
+            document.getElementById('profileBalance').textContent = `${userBalance} ₽`;
+            document.getElementById('profileOverlay').classList.add('open');
         }
 
-        if (search) {
-            const q = search.toLowerCase();
-            filtered = filtered.filter(c =>
-                c.name.toLowerCase().includes(q) ||
-                c.code.includes(q)
-            );
+        function closeProfile() {
+            document.getElementById('profileOverlay').classList.remove('open');
         }
 
-        if (filtered.length === 0) {
-            container.innerHTML = `<div class="empty">😔 Нет номеров по вашему запросу</div>`;
-            return;
+        // ============================================================
+        // ПОПОЛНЕНИЕ
+        // ============================================================
+        function openTopup() {
+            document.getElementById('topupBalance').textContent = `${userBalance} ₽`;
+            document.getElementById('topupStatus').textContent = '';
+            document.getElementById('topupStatus').className = 'topup-status';
+            document.getElementById('topupOverlay').classList.add('open');
         }
 
-        let html = '';
-        filtered.forEach(c => {
-            const spamLabel = c.spam ? '🚫 Спам-блок' : '✅ Без спама';
-            const typeLabel = c.type === 'саморег'
-                ? `<span class="self-badge">${c.type} (+50₽)</span>`
-                : `<span>${c.type}</span>`;
+        function closeTopup() {
+            document.getElementById('topupOverlay').classList.remove('open');
+        }
 
-            html += `
-                <div class="card">
-                    <div class="card-header">
-                        <span class="flag">${c.flag}</span>
-                        <span class="code">${c.code}</span>
-                        <span class="price">${c.price} ₽</span>
+        // ============================================================
+        // ⭐ ОПЛАТА ЗВЁЗДАМИ
+        // ============================================================
+        function payStars() {
+            const amount = parseInt(document.getElementById('topupAmount').value) || 100;
+            const status = document.getElementById('topupStatus');
+
+            if (amount < 10) {
+                status.textContent = '❌ Минимальная сумма пополнения — 10 ₽ (10 ⭐)';
+                status.className = 'topup-status';
+                return;
+            }
+
+            // 1 звезда = 1 рубль
+            const stars = amount;
+
+            status.textContent = `⏳ Создаём платёж на ${stars} ⭐...`;
+            status.className = 'topup-status loading';
+
+            // Отправляем запрос в бота на создание инвойса
+            tg.sendData(JSON.stringify({
+                action: 'pay_stars_topup',
+                amount: stars
+            }));
+
+            // Показываем инструкцию
+            setTimeout(() => {
+                status.className = 'topup-status stars';
+                status.innerHTML = `
+⭐ *Оплата звёздами*\n\n
+💳 Сумма: ${stars} ⭐ (${amount} ₽)\n\n
+📌 Нажмите кнопку *«Оплатить»* в появившемся окне Telegram.\n
+✅ После оплаты баланс пополнится автоматически.
+                `;
+            }, 1500);
+        }
+
+        // ============================================================
+        // 🇷🇺 ОПЛАТА ПО СБП
+        // ============================================================
+        function paySBP() {
+            const amount = parseInt(document.getElementById('topupAmount').value) || 100;
+            const status = document.getElementById('topupStatus');
+
+            if (amount < 10) {
+                status.textContent = '❌ Минимальная сумма пополнения — 10 ₽';
+                status.className = 'topup-status';
+                return;
+            }
+
+            status.textContent = '⏳ Генерируем ссылку для оплаты...';
+            status.className = 'topup-status loading';
+
+            setTimeout(() => {
+                status.className = 'topup-status success';
+                status.innerHTML = `
+✅ Оплата по СБП\n
+📱 Номер телефона: <b>+7 911 894 00 96</b>\n
+💳 Номер карты: <b>2200 3961 1698 9951</b>\n
+Получатель: <b>Святослав Дмитриев</b>\n\n
+📌 После оплаты баланс будет пополнен вручную.
+                `;
+            }, 1000);
+        }
+
+        // ============================================================
+        // 💳 ОПЛАТА КАРТОЙ (заглушка)
+        // ============================================================
+        function payCard() {
+            const status = document.getElementById('topupStatus');
+            status.textContent = '⏳ Перенаправление на оплату картой...';
+            status.className = 'topup-status loading';
+
+            setTimeout(() => {
+                status.className = 'topup-status';
+                status.innerHTML = `
+❌ Оплата картой временно недоступна.\n
+Используйте СБП или звёзды.
+                `;
+            }, 1500);
+        }
+
+        // ============================================================
+        // РЕНДЕР КАТАЛОГА
+        // ============================================================
+        function renderCatalog(filter = 'all', search = '') {
+            const container = document.getElementById('catalog');
+            let filtered = countries;
+
+            if (filter !== 'all') {
+                filtered = filtered.filter(c => c.type === filter);
+            }
+
+            if (search) {
+                const q = search.toLowerCase();
+                filtered = filtered.filter(c =>
+                    c.name.toLowerCase().includes(q) ||
+                    c.code.includes(q)
+                );
+            }
+
+            if (filtered.length === 0) {
+                container.innerHTML = `<div class="empty">😔 Нет номеров по вашему запросу</div>`;
+                return;
+            }
+
+            let html = '';
+            filtered.forEach(c => {
+                const spamLabel = c.spam ? '🚫 Спам-блок' : '✅ Без спама';
+                const typeLabel = c.type === 'саморег' ?
+                    `<span class="self-badge">${c.type} (+50₽)</span>` :
+                    `<span>${c.type}</span>`;
+
+                html += `
+                    <div class="card">
+                        <div class="card-header">
+                            <span class="flag">${c.flag}</span>
+                            <span class="code">${c.code}</span>
+                            <span class="price">${c.price} ₽</span>
+                        </div>
+                        <div class="card-desc">${c.name}</div>
+                        <div class="card-meta">
+                            <span>${spamLabel}</span>
+                            ${typeLabel}
+                        </div>
+                        <button class="btn-buy" onclick="addToCart('${c.code}', '${c.name} (${c.type})', ${c.price})">🛒 Купить</button>
                     </div>
-                    <div class="card-desc">${c.name}</div>
-                    <div class="card-meta">
-                        <span>${spamLabel}</span>
-                        ${typeLabel}
-                    </div>
-                    <button class="btn-buy" onclick="addToCart('${c.code}', '${c.name} (${c.type})', ${c.price})">🛒 Купить</button>
-                </div>
-            `;
-        });
-        container.innerHTML = html;
-    }
-
-    function addToCart(code, name, price) {
-        cart.push({ code, name, price });
-        document.getElementById('cartCount').textContent = cart.length;
-        showToast(`✅ ${name} добавлен в корзину`);
-        tg.HapticFeedback.impactOccurred('light');
-        tg.sendData(JSON.stringify({ action: 'update_cart', cart: cart }));
-    }
-
-    function showCart() {
-        if (cart.length === 0) {
-            tg.showAlert('🛍 Корзина пуста');
-            return;
+                `;
+            });
+            container.innerHTML = html;
         }
-        let text = '🛍 Ваша корзина:\n\n';
-        let total = 0;
-        cart.forEach((item, i) => {
-            text += `${i+1}. ${item.name} (${item.code}) — ${item.price} ₽\n`;
-            total += item.price;
-        });
-        text += `\n💰 Итого: ${total} ₽`;
-        tg.showAlert(text);
-    }
 
-    function showToast(msg) {
-        const el = document.getElementById('toast');
-        el.textContent = msg;
-        el.classList.add('show');
-        setTimeout(() => el.classList.remove('show'), 2500);
-    }
-
-    document.getElementById('filterRow').addEventListener('click', (e) => {
-        if (e.target.tagName === 'BUTTON') {
-            document.querySelectorAll('.filter-row button').forEach(b => b.classList.remove('active'));
-            e.target.classList.add('active');
-            currentFilter = e.target.dataset.filter;
-            renderCatalog(currentFilter, document.getElementById('searchInput').value);
+        // ============================================================
+        // КОРЗИНА
+        // ============================================================
+        function addToCart(code, name, price) {
+            cart.push({ code, name, price });
+            document.getElementById('cartCount').textContent = cart.length;
+            showToast(`✅ ${name} добавлен в корзину`);
+            tg.HapticFeedback.impactOccurred('light');
+            tg.sendData(JSON.stringify({ action: 'update_cart', cart: cart }));
         }
-    });
 
-    document.getElementById('searchInput').addEventListener('input', (e) => {
-        renderCatalog(currentFilter, e.target.value);
-    });
+        function showCart() {
+            if (cart.length === 0) {
+                tg.showAlert('🛍 Корзина пуста');
+                return;
+            }
+            let text = '🛍 Ваша корзина:\n\n';
+            let total = 0;
+            cart.forEach((item, i) => {
+                text += `${i + 1}. ${item.name} (${item.code}) — ${item.price} ₽\n`;
+                total += item.price;
+            });
+            text += `\n💰 Итого: ${total} ₽`;
+            tg.showAlert(text);
+        }
 
-    // ============================================================
-    // ЗАПУСК
-    // ============================================================
-    renderCatalog('all', '');
-</script>
-
-</body>
-</html>
+        function showToast(msg
