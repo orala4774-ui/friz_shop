@@ -44,10 +44,6 @@
             0% { transform: scale(0); opacity: 0.6; }
             100% { transform: scale(4); opacity: 0; }
         }
-        @keyframes slideUp {
-            0% { transform: translateY(40px); opacity: 0; }
-            100% { transform: translateY(0); opacity: 1; }
-        }
 
         .card-animate {
             animation: fadeUp 0.5s cubic-bezier(0.4, 0, 0.2, 1) forwards;
@@ -61,10 +57,6 @@
         .card-animate.delay-6 { animation-delay: 0.18s; }
         .card-animate.delay-7 { animation-delay: 0.21s; }
         .card-animate.delay-8 { animation-delay: 0.24s; }
-
-        .modal-animate {
-            animation: slideUp 0.4s cubic-bezier(0.4, 0, 0.2, 1) forwards;
-        }
 
         .header {
             display: flex;
@@ -358,39 +350,6 @@
             text-align: center;
             margin-bottom: 16px;
         }
-        .modal .balance-box {
-            background: var(--bg-dark);
-            padding: 14px;
-            border-radius: var(--radius);
-            border: 1px solid var(--border-color);
-            margin-bottom: 20px;
-            text-align: center;
-        }
-        .modal .balance-box .label {
-            font-size: 13px;
-            color: var(--text-secondary);
-        }
-        .modal .balance-box .amount {
-            font-size: 28px;
-            font-weight: 700;
-            color: #ff4444;
-        }
-        .modal .input-field {
-            width: 100%;
-            padding: 14px 16px;
-            background: var(--bg-dark);
-            border: 1px solid var(--border-color);
-            border-radius: var(--radius);
-            color: var(--text-primary);
-            font-size: 16px;
-            outline: none;
-            margin-bottom: 14px;
-            transition: 0.3s;
-        }
-        .modal .input-field:focus {
-            border-color: var(--primary);
-            box-shadow: 0 0 0 4px var(--primary-glow);
-        }
         .modal .btn {
             width: 100%;
             padding: 14px;
@@ -413,26 +372,6 @@
             color: #fff;
         }
         .modal .btn-secondary:hover { background: #3a3a3a; }
-        .modal .btn-stars {
-            background: #f5b700;
-            color: #000;
-            box-shadow: 0 0 30px rgba(245, 183, 0, 0.3);
-        }
-        .modal .btn-stars:hover { background: #e0a500; }
-        .modal .status {
-            margin-top: 14px;
-            padding: 12px;
-            border-radius: var(--radius);
-            background: var(--bg-dark);
-            border: 1px solid var(--border-color);
-            font-size: 14px;
-            white-space: pre-line;
-            color: #ff6b6b;
-            transition: 0.3s;
-        }
-        .modal .status.success { color: #6bff6b; }
-        .modal .status.loading { color: #ffd93d; }
-        .modal .status.stars { color: #f5b700; }
 
         .toast {
             position: fixed;
@@ -495,34 +434,13 @@
 
     <div class="toast" id="toast"></div>
 
+    <!-- ПРОФИЛЬ (без баланса) -->
     <div class="overlay" id="profileOverlay">
         <div class="modal modal-animate">
             <div class="avatar-lg" id="profileAvatar">👤</div>
             <div class="title" id="profileName">Пользователь</div>
             <div class="sub" id="profileId">ID: 123456789</div>
-            <div class="balance-box">
-                <div class="label">💰 Баланс</div>
-                <div class="amount" id="profileBalance">0 ₽</div>
-            </div>
             <button class="btn btn-primary" onclick="closeOverlay('profileOverlay')">✖ Закрыть</button>
-        </div>
-    </div>
-
-    <div class="overlay" id="topupOverlay">
-        <div class="modal modal-animate">
-            <div class="avatar-lg">💳</div>
-            <div class="title">Пополнить баланс</div>
-            <div class="sub">Выберите способ оплаты</div>
-            <div class="balance-box">
-                <div class="label">💰 Текущий баланс</div>
-                <div class="amount" id="topupBalance">0 ₽</div>
-            </div>
-            <input type="number" class="input-field" id="topupAmount" value="100" min="10" step="10" placeholder="Сумма (₽)">
-            <button class="btn btn-stars" onclick="payStars()">⭐ Оплатить звёздами (1 ⭐ = 1 ₽)</button>
-            <button class="btn btn-primary" onclick="paySBP()">🇷🇺 Оплатить по СБП</button>
-            <button class="btn btn-secondary" onclick="payCard()">💳 Оплатить картой</button>
-            <button class="btn btn-secondary" onclick="closeOverlay('topupOverlay')">✖ Закрыть</button>
-            <div class="status" id="topupStatus"></div>
         </div>
     </div>
 
@@ -552,7 +470,6 @@
     <div class="bottom-nav">
         <a href="#" class="active" onclick="filterAll()"><span class="icon">🏠</span> Каталог</a>
         <a href="#" onclick="showCart()"><span class="icon">🛍</span> Корзина</a>
-        <a href="#" onclick="openTopup()"><span class="icon">💳</span> Пополнить</a>
     </div>
 
     <script>
@@ -562,12 +479,8 @@
 
         let cart = [];
         let currentFilter = 'all';
-        let userBalance = 0;
         let userData = tg.initDataUnsafe?.user || {};
 
-        // ============================================================
-        // КАТАЛОГ
-        // ============================================================
         const rawCountries = [
             { code: "+1", flag: "🇺🇸", name: "США", base: 49, types: ["отлега"], spam: false },
             { code: "+1", flag: "🇺🇸", name: "США (спам)", base: 37, types: ["отлега"], spam: true },
@@ -658,75 +571,7 @@
             document.getElementById('profileAvatar').textContent = avatar;
             document.getElementById('profileName').textContent = name;
             document.getElementById('profileId').textContent = `ID: ${id}`;
-            document.getElementById('profileBalance').textContent = `${userBalance} ₽`;
             openOverlay('profileOverlay');
-        }
-
-        function openTopup() {
-            document.getElementById('topupBalance').textContent = `${userBalance} ₽`;
-            document.getElementById('topupStatus').textContent = '';
-            document.getElementById('topupStatus').className = 'status';
-            openOverlay('topupOverlay');
-        }
-
-        function payStars() {
-            const amount = parseInt(document.getElementById('topupAmount').value) || 100;
-            const status = document.getElementById('topupStatus');
-            if (amount < 10) {
-                status.textContent = '❌ Минимальная сумма — 10 ₽ (10 ⭐)';
-                status.className = 'status';
-                return;
-            }
-            status.textContent = `⏳ Создаём платёж на ${amount} ⭐...`;
-            status.className = 'status loading';
-            tg.sendData(JSON.stringify({ action: 'pay_stars_topup', amount: amount }));
-            setTimeout(() => {
-                status.className = 'status stars';
-                status.innerHTML =
-                    `
-⭐ *Оплата звёздами*\n\n
-💳 Сумма: ${amount} ⭐ (${amount} ₽)\n\n
-📌 В Telegram появится окно оплаты.\n
-✅ Нажмите *«Оплатить»*.
-                `;
-            }, 1000);
-        }
-
-        function paySBP() {
-            const amount = parseInt(document.getElementById('topupAmount').value) || 100;
-            const status = document.getElementById('topupStatus');
-            if (amount < 10) {
-                status.textContent = '❌ Минимальная сумма — 10 ₽';
-                status.className = 'status';
-                return;
-            }
-            status.textContent = '⏳ Генерируем ссылку для оплаты...';
-            status.className = 'status loading';
-            setTimeout(() => {
-                status.className = 'status success';
-                status.innerHTML =
-                    `
-✅ Оплата по СБП\n
-📱 Номер телефона: <b>+7 911 894 00 96</b>\n
-💳 Номер карты: <b>2200 3961 1698 9951</b>\n
-Получатель: <b>Святослав Дмитриев</b>\n\n
-📌 После оплаты баланс пополнится вручную.
-                `;
-            }, 1000);
-        }
-
-        function payCard() {
-            const status = document.getElementById('topupStatus');
-            status.textContent = '⏳ Перенаправление на оплату картой...';
-            status.className = 'status loading';
-            setTimeout(() => {
-                status.className = 'status';
-                status.innerHTML =
-                    `
-❌ Оплата картой временно недоступна.\n
-Используйте СБП или звёзды.
-                `;
-            }, 1500);
         }
 
         function renderCatalog(filter = 'all', search = '') {
