@@ -6,9 +6,6 @@
     <title>FRIZ SHOP</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
-        /* ============================================================
-           🔥 ОСНОВНЫЕ СТИЛИ
-           ============================================================ */
         * {
             margin: 0;
             padding: 0;
@@ -17,19 +14,14 @@
         }
         :root {
             --primary: #cc3333;
-            --primary-hover: #aa2222;
-            --primary-glow: rgba(204, 51, 51, 0.3);
+            --primary-glow: rgba(204, 51, 51, 0.4);
             --bg-dark: #0a0a0a;
             --bg-card: #120808;
-            --bg-card-hover: #1a0e0e;
             --border-color: #2a0a0a;
             --text-primary: #ffffff;
-            --text-secondary: #888888;
-            --text-muted: #555555;
+            --text-secondary: #999;
             --radius: 16px;
             --radius-xl: 28px;
-            --shadow: 0 20px 60px rgba(0, 0, 0, 0.8);
-            --transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
@@ -40,26 +32,14 @@
             overflow-x: hidden;
         }
 
-        /* ============================================================
-           ✨ АНИМАЦИИ
-           ============================================================ */
         @keyframes fadeUp {
-            from {
+            0% {
                 opacity: 0;
-                transform: translateY(20px);
+                transform: translateY(25px) scale(0.97);
             }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-        @keyframes pulse {
-            0%,
             100% {
-                transform: scale(1);
-            }
-            50% {
-                transform: scale(1.05);
+                opacity: 1;
+                transform: translateY(0) scale(1);
             }
         }
         @keyframes shimmer {
@@ -70,67 +50,79 @@
                 background-position: 200% center;
             }
         }
-        .animate {
-            animation: fadeUp 0.5s ease forwards;
+        @keyframes rippleAnim {
+            0% {
+                transform: scale(0);
+                opacity: 0.6;
+            }
+            100% {
+                transform: scale(4);
+                opacity: 0;
+            }
+        }
+        @keyframes slideUp {
+            0% {
+                transform: translateY(40px);
+                opacity: 0;
+            }
+            100% {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .card-animate {
+            animation: fadeUp 0.5s cubic-bezier(0.4, 0, 0.2, 1) forwards;
             opacity: 0;
         }
-        .delay-1 {
-            animation-delay: 0.05s;
+        .card-animate.delay-1 {
+            animation-delay: 0.03s;
         }
-        .delay-2 {
-            animation-delay: 0.1s;
+        .card-animate.delay-2 {
+            animation-delay: 0.06s;
         }
-        .delay-3 {
+        .card-animate.delay-3 {
+            animation-delay: 0.09s;
+        }
+        .card-animate.delay-4 {
+            animation-delay: 0.12s;
+        }
+        .card-animate.delay-5 {
             animation-delay: 0.15s;
         }
-        .delay-4 {
-            animation-delay: 0.2s;
+        .card-animate.delay-6 {
+            animation-delay: 0.18s;
+        }
+        .card-animate.delay-7 {
+            animation-delay: 0.21s;
+        }
+        .card-animate.delay-8 {
+            animation-delay: 0.24s;
         }
 
-        /* ============================================================
-           🏷️ ГЛАВНЫЙ ЗАГОЛОВОК
-           ============================================================ */
-        .main-title {
-            font-size: 26px;
-            font-weight: 800;
-            text-align: center;
-            padding: 12px 0 6px;
-            background: linear-gradient(135deg, #cc3333, #ff5555, #cc3333);
-            background-size: 200% auto;
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            animation: shimmer 3s linear infinite;
-            letter-spacing: -0.5px;
+        .modal-animate {
+            animation: slideUp 0.4s cubic-bezier(0.4, 0, 0.2, 1) forwards;
         }
 
-        /* ============================================================
-           🧩 ШАПКА
-           ============================================================ */
         .header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 12px 0 16px;
+            padding: 8px 0 16px;
             border-bottom: 1px solid var(--border-color);
-            margin-bottom: 20px;
-        }
-        .header-left {
-            display: flex;
-            align-items: center;
-            gap: 12px;
+            margin-bottom: 16px;
         }
         .header-logo {
-            font-size: 24px;
-            font-weight: 700;
-            background: linear-gradient(135deg, #cc3333, #ff4444);
+            font-size: 22px;
+            font-weight: 800;
+            background: linear-gradient(135deg, #cc3333, #ff5555);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            letter-spacing: -0.5px;
         }
         .header-right {
             display: flex;
             align-items: center;
-            gap: 16px;
+            gap: 14px;
         }
         .header-badge {
             background: var(--primary);
@@ -140,12 +132,13 @@
             font-size: 13px;
             font-weight: 700;
             cursor: pointer;
-            transition: var(--transition);
+            transition: 0.3s;
             min-width: 28px;
             text-align: center;
+            box-shadow: 0 0 20px var(--primary-glow);
         }
         .header-badge:hover {
-            transform: scale(1.05);
+            transform: scale(1.08);
         }
         .header-avatar {
             width: 40px;
@@ -159,22 +152,36 @@
             font-weight: 700;
             cursor: pointer;
             border: 2px solid var(--primary);
-            transition: var(--transition);
+            transition: 0.3s;
             color: #fff;
             text-transform: uppercase;
             user-select: none;
+            box-shadow: 0 0 20px var(--primary-glow);
         }
         .header-avatar:hover {
-            border-color: #ff4444;
+            border-color: #ff5555;
             transform: scale(1.05);
         }
 
-        /* ============================================================
-           🔍 ПОИСК
-           ============================================================ */
-        .search-container {
+        .hero-title {
+            font-size: 28px;
+            font-weight: 800;
+            text-align: center;
+            padding: 8px 0 12px;
+            background: linear-gradient(135deg, #cc3333, #ff5555, #cc3333);
+            background-size: 200% auto;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: shimmer 3s linear infinite;
+            letter-spacing: -0.5px;
+        }
+        .hero-sub {
+            text-align: center;
+            color: var(--text-secondary);
+            font-size: 14px;
             margin-bottom: 16px;
         }
+
         .search-input {
             width: 100%;
             padding: 14px 18px;
@@ -184,19 +191,17 @@
             color: var(--text-primary);
             font-size: 15px;
             outline: none;
-            transition: var(--transition);
+            transition: 0.3s;
+            margin-bottom: 16px;
         }
         .search-input:focus {
             border-color: var(--primary);
             box-shadow: 0 0 0 4px var(--primary-glow);
         }
         .search-input::placeholder {
-            color: var(--text-muted);
+            color: #555;
         }
 
-        /* ============================================================
-           🎛️ ФИЛЬТРЫ
-           ============================================================ */
         .filter-row {
             display: flex;
             gap: 8px;
@@ -205,7 +210,6 @@
             margin-bottom: 16px;
             flex-wrap: nowrap;
             scrollbar-width: none;
-            -webkit-overflow-scrolling: touch;
         }
         .filter-row::-webkit-scrollbar {
             display: none;
@@ -220,22 +224,20 @@
             font-size: 13px;
             font-weight: 500;
             cursor: pointer;
-            transition: var(--transition);
+            transition: 0.3s;
             white-space: nowrap;
         }
         .filter-btn.active {
             background: var(--primary);
             border-color: var(--primary);
             color: #fff;
+            box-shadow: 0 0 20px var(--primary-glow);
         }
         .filter-btn:hover {
-            background: var(--bg-card-hover);
+            background: #1a0e0e;
             color: #fff;
         }
 
-        /* ============================================================
-           🃏 КАРТОЧКИ ТОВАРОВ
-           ============================================================ */
         .catalog-grid {
             display: flex;
             flex-direction: column;
@@ -246,23 +248,14 @@
             border-radius: var(--radius);
             padding: 18px 16px;
             border: 1px solid var(--border-color);
-            transition: var(--transition);
-            animation: fadeUp 0.4s ease forwards;
-            opacity: 0;
+            transition: 0.3s;
             position: relative;
             overflow: hidden;
         }
-        .product-card::before {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background: linear-gradient(135deg, transparent 60%, rgba(204, 51, 51, 0.03));
-            pointer-events: none;
-        }
         .product-card:hover {
             border-color: var(--primary);
-            transform: translateY(-2px);
-            box-shadow: 0 8px 30px rgba(204, 51, 51, 0.06);
+            transform: translateY(-3px);
+            box-shadow: 0 12px 40px rgba(204, 51, 51, 0.08);
         }
         .product-card .row {
             display: flex;
@@ -322,7 +315,7 @@
         .product-card .btn-buy {
             width: 100%;
             margin-top: 12px;
-            padding: 11px;
+            padding: 12px;
             background: var(--primary);
             border: none;
             border-radius: 12px;
@@ -330,12 +323,13 @@
             font-size: 16px;
             font-weight: 600;
             cursor: pointer;
-            transition: var(--transition);
+            transition: 0.3s;
             position: relative;
             overflow: hidden;
+            box-shadow: 0 0 20px var(--primary-glow);
         }
         .product-card .btn-buy:hover {
-            background: var(--primary-hover);
+            background: #bb2222;
             transform: scale(1.01);
         }
         .product-card .btn-buy:active {
@@ -344,21 +338,15 @@
         .product-card .btn-buy .ripple {
             position: absolute;
             border-radius: 50%;
-            background: rgba(255, 255, 255, 0.2);
+            background: rgba(255, 255, 255, 0.25);
             transform: scale(0);
             animation: rippleAnim 0.6s linear;
             pointer-events: none;
         }
-        @keyframes rippleAnim {
-            to {
-                transform: scale(4);
-                opacity: 0;
-            }
-        }
 
         .empty-state {
             text-align: center;
-            color: var(--text-muted);
+            color: #555;
             padding: 60px 0;
             font-size: 16px;
         }
@@ -368,21 +356,16 @@
             margin-bottom: 16px;
         }
 
-        /* ============================================================
-           🪟 МОДАЛЬНЫЕ ОКНА
-           ============================================================ */
         .overlay {
             display: none;
             position: fixed;
             inset: 0;
-            background: rgba(0, 0, 0, 0.8);
-            backdrop-filter: blur(8px);
-            -webkit-backdrop-filter: blur(8px);
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(12px);
             z-index: 1000;
             justify-content: center;
             align-items: center;
             padding: 20px;
-            animation: fadeUp 0.3s ease;
         }
         .overlay.open {
             display: flex;
@@ -394,10 +377,10 @@
             width: 100%;
             max-width: 400px;
             border: 1px solid var(--border-color);
-            box-shadow: var(--shadow);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.9);
             max-height: 90vh;
             overflow-y: auto;
-            animation: fadeUp 0.3s ease;
+            animation: slideUp 0.4s cubic-bezier(0.4, 0, 0.2, 1) forwards;
         }
         .modal .avatar-lg {
             width: 80px;
@@ -412,6 +395,7 @@
             font-weight: 700;
             color: #fff;
             text-transform: uppercase;
+            box-shadow: 0 0 40px var(--primary-glow);
         }
         .modal .title {
             font-size: 20px;
@@ -452,7 +436,7 @@
             font-size: 16px;
             outline: none;
             margin-bottom: 14px;
-            transition: var(--transition);
+            transition: 0.3s;
         }
         .modal .input-field:focus {
             border-color: var(--primary);
@@ -466,15 +450,16 @@
             font-size: 16px;
             font-weight: 600;
             cursor: pointer;
-            transition: var(--transition);
+            transition: 0.3s;
             margin-top: 8px;
         }
         .modal .btn-primary {
             background: var(--primary);
             color: #fff;
+            box-shadow: 0 0 20px var(--primary-glow);
         }
         .modal .btn-primary:hover {
-            background: var(--primary-hover);
+            background: #bb2222;
         }
         .modal .btn-secondary {
             background: #2a2a2a;
@@ -486,6 +471,7 @@
         .modal .btn-stars {
             background: #f5b700;
             color: #000;
+            box-shadow: 0 0 30px rgba(245, 183, 0, 0.3);
         }
         .modal .btn-stars:hover {
             background: #e0a500;
@@ -499,7 +485,7 @@
             font-size: 14px;
             white-space: pre-line;
             color: #ff6b6b;
-            transition: var(--transition);
+            transition: 0.3s;
         }
         .modal .status.success {
             color: #6bff6b;
@@ -511,14 +497,11 @@
             color: #f5b700;
         }
 
-        /* ============================================================
-           🍞 TOAST-УВЕДОМЛЕНИЯ
-           ============================================================ */
         .toast {
             position: fixed;
             top: 20px;
             left: 50%;
-            transform: translateX(-50%) translateY(-20px);
+            transform: translateX(-50%) translateY(-30px);
             background: var(--bg-card);
             color: #fff;
             padding: 12px 24px;
@@ -532,15 +515,13 @@
             box-shadow: 0 8px 30px rgba(0, 0, 0, 0.6);
             text-align: center;
             max-width: 90%;
+            backdrop-filter: blur(8px);
         }
         .toast.show {
             opacity: 1;
             transform: translateX(-50%) translateY(0);
         }
 
-        /* ============================================================
-           📱 НИЖНЯЯ НАВИГАЦИЯ
-           ============================================================ */
         .bottom-nav {
             position: fixed;
             bottom: 0;
@@ -552,7 +533,6 @@
             justify-content: space-around;
             padding: 10px 0 16px 0;
             backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
             z-index: 100;
         }
         .bottom-nav a {
@@ -563,7 +543,7 @@
             flex-direction: column;
             align-items: center;
             gap: 2px;
-            transition: var(--transition);
+            transition: 0.3s;
             cursor: pointer;
             padding: 4px 12px;
             border-radius: 12px;
@@ -579,33 +559,14 @@
         .bottom-nav a:hover {
             color: #fff;
         }
-
-        /* ============================================================
-           🧩 УТИЛИТЫ
-           ============================================================ */
-        .mt-8 {
-            margin-top: 8px;
-        }
-        .text-center {
-            text-align: center;
-        }
-        .gap-8 {
-            gap: 8px;
-        }
     </style>
 </head>
 <body>
 
-    <!-- ============================================================
-    🍞 TOAST
-    ============================================================ -->
     <div class="toast" id="toast"></div>
 
-    <!-- ============================================================
-    👤 ПРОФИЛЬ
-    ============================================================ -->
     <div class="overlay" id="profileOverlay">
-        <div class="modal">
+        <div class="modal modal-animate">
             <div class="avatar-lg" id="profileAvatar">👤</div>
             <div class="title" id="profileName">Пользователь</div>
             <div class="sub" id="profileId">ID: 123456789</div>
@@ -617,68 +578,38 @@
         </div>
     </div>
 
-    <!-- ============================================================
-    💳 ПОПОЛНЕНИЕ
-    ============================================================ -->
     <div class="overlay" id="topupOverlay">
-        <div class="modal">
+        <div class="modal modal-animate">
             <div class="avatar-lg">💳</div>
             <div class="title">Пополнить баланс</div>
             <div class="sub">Выберите способ оплаты</div>
-
             <div class="balance-box">
                 <div class="label">💰 Текущий баланс</div>
                 <div class="amount" id="topupBalance">0 ₽</div>
             </div>
-
             <input type="number" class="input-field" id="topupAmount" value="100" min="10" step="10" placeholder="Сумма (₽)">
-
-            <button class="btn btn-stars" onclick="payStars()">
-                ⭐ Оплатить звёздами (1 ⭐ = 1 ₽)
-            </button>
-            <button class="btn btn-primary" onclick="paySBP()">
-                🇷🇺 Оплатить по СБП
-            </button>
-            <button class="btn btn-secondary" onclick="payCard()">
-                💳 Оплатить картой
-            </button>
-            <button class="btn btn-secondary" onclick="closeOverlay('topupOverlay')">
-                ✖ Закрыть
-            </button>
-
+            <button class="btn btn-stars" onclick="payStars()">⭐ Оплатить звёздами (1 ⭐ = 1 ₽)</button>
+            <button class="btn btn-primary" onclick="paySBP()">🇷🇺 Оплатить по СБП</button>
+            <button class="btn btn-secondary" onclick="payCard()">💳 Оплатить картой</button>
+            <button class="btn btn-secondary" onclick="closeOverlay('topupOverlay')">✖ Закрыть</button>
             <div class="status" id="topupStatus"></div>
         </div>
     </div>
 
-    <!-- ============================================================
-    🏷️ ГЛАВНЫЙ ЗАГОЛОВОК
-    ============================================================ -->
-    <div class="main-title animate delay-1">🛒 FRIZ SHOP</div>
+    <div class="hero-title">🛒 FRIZ SHOP</div>
+    <div class="hero-sub">🔥 Лучшие номера по лучшим ценам</div>
 
-    <!-- ============================================================
-    🧩 ШАПКА
-    ============================================================ -->
-    <div class="header animate delay-2">
-        <div class="header-left">
-            <span class="header-logo">⚡</span>
-        </div>
+    <div class="header">
+        <span class="header-logo">⚡</span>
         <div class="header-right">
             <span class="header-badge" id="cartCount" onclick="showCart()">0</span>
             <div class="header-avatar" id="avatarBtn" onclick="openProfile()">👤</div>
         </div>
     </div>
 
-    <!-- ============================================================
-    🔍 ПОИСК
-    ============================================================ -->
-    <div class="search-container animate delay-3">
-        <input class="search-input" id="searchInput" placeholder="🔍 Поиск по стране или коду..." />
-    </div>
+    <input class="search-input" id="searchInput" placeholder="🔍 Поиск по стране или коду..." />
 
-    <!-- ============================================================
-    🎛️ ФИЛЬТРЫ
-    ============================================================ -->
-    <div class="filter-row animate delay-4" id="filterRow">
+    <div class="filter-row" id="filterRow">
         <button class="filter-btn active" data-filter="all">Все</button>
         <button class="filter-btn" data-filter="новорег">🆕 Новорег</button>
         <button class="filter-btn" data-filter="авторег">🤖 Авторег</button>
@@ -686,14 +617,8 @@
         <button class="filter-btn" data-filter="отлега">⏳ Отлега</button>
     </div>
 
-    <!-- ============================================================
-    🃏 КАТАЛОГ
-    ============================================================ -->
     <div class="catalog-grid" id="catalog"></div>
 
-    <!-- ============================================================
-    📱 НИЖНЯЯ НАВИГАЦИЯ
-    ============================================================ -->
     <div class="bottom-nav">
         <a href="#" class="active" onclick="filterAll()"><span class="icon">🏠</span> Каталог</a>
         <a href="#" onclick="showCart()"><span class="icon">🛍</span> Корзина</a>
@@ -701,9 +626,6 @@
     </div>
 
     <script>
-        // ============================================================
-        // 🔥 ИНИЦИАЛИЗАЦИЯ TELEGRAM WEB APP
-        // ============================================================
         const tg = window.Telegram.WebApp;
         tg.ready();
         tg.expand();
@@ -713,9 +635,6 @@
         let userBalance = 0;
         let userData = tg.initDataUnsafe?.user || {};
 
-        // ============================================================
-        // 📦 КАТАЛОГ
-        // ============================================================
         const rawCountries = [
             { code: "+1", flag: "🇺🇸", name: "США", base: 49, types: ["отлега"], spam: false },
             { code: "+1", flag: "🇺🇸", name: "США (спам)", base: 37, types: ["отлега"], spam: true },
@@ -773,7 +692,6 @@
             { code: "+44", flag: "🇬🇧", name: "Великобритания", base: 159, types: ["авторег"], spam: false }
         ];
 
-        // Разворачиваем с ценами
         const countries = [];
         rawCountries.forEach(item => {
             item.types.forEach(type => {
@@ -785,18 +703,12 @@
                     name: item.name,
                     type: type,
                     price: price,
-                    spam: item.spam,
-                    raw: item
+                    spam: item.spam
                 });
             });
         });
-
-        // Сортировка по цене (возрастание)
         countries.sort((a, b) => a.price - b.price);
 
-        // ============================================================
-        // 🧩 УПРАВЛЕНИЕ ОВЕРЛЕЯМИ
-        // ============================================================
         function openOverlay(id) {
             document.getElementById(id).classList.add('open');
         }
@@ -805,15 +717,11 @@
             document.getElementById(id).classList.remove('open');
         }
 
-        // ============================================================
-        // 👤 ПРОФИЛЬ
-        // ============================================================
         function openProfile() {
             const user = userData;
             const name = user?.first_name || 'Пользователь';
             const id = user?.id || '—';
             const avatar = name.charAt(0).toUpperCase() || '👤';
-
             document.getElementById('profileAvatar').textContent = avatar;
             document.getElementById('profileName').textContent = name;
             document.getElementById('profileId').textContent = `ID: ${id}`;
@@ -821,9 +729,6 @@
             openOverlay('profileOverlay');
         }
 
-        // ============================================================
-        // 💳 ПОПОЛНЕНИЕ
-        // ============================================================
         function openTopup() {
             document.getElementById('topupBalance').textContent = `${userBalance} ₽`;
             document.getElementById('topupStatus').textContent = '';
@@ -831,57 +736,43 @@
             openOverlay('topupOverlay');
         }
 
-        // ============================================================
-        // ⭐ ОПЛАТА ЗВЁЗДАМИ
-        // ============================================================
         function payStars() {
             const amount = parseInt(document.getElementById('topupAmount').value) || 100;
             const status = document.getElementById('topupStatus');
-
             if (amount < 10) {
                 status.textContent = '❌ Минимальная сумма — 10 ₽ (10 ⭐)';
                 status.className = 'status';
                 return;
             }
-
             status.textContent = `⏳ Создаём платёж на ${amount} ⭐...`;
             status.className = 'status loading';
-
-            tg.sendData(JSON.stringify({
-                action: 'pay_stars_topup',
-                amount: amount
-            }));
-
+            tg.sendData(JSON.stringify({ action: 'pay_stars_topup', amount: amount }));
             setTimeout(() => {
                 status.className = 'status stars';
-                status.innerHTML = `
+                status.innerHTML =
+                    `
 ⭐ *Оплата звёздами*\n\n
 💳 Сумма: ${amount} ⭐ (${amount} ₽)\n\n
-📌 Нажмите *«Оплатить»* в появившемся окне Telegram.\n
-✅ После оплаты баланс пополнится автоматически.
+📌 В Telegram появится окно оплаты.\n
+✅ Нажмите *«Оплатить»*.
                 `;
-            }, 1500);
+            }, 1000);
         }
 
-        // ============================================================
-        // 🇷🇺 ОПЛАТА ПО СБП
-        // ============================================================
         function paySBP() {
             const amount = parseInt(document.getElementById('topupAmount').value) || 100;
             const status = document.getElementById('topupStatus');
-
             if (amount < 10) {
                 status.textContent = '❌ Минимальная сумма — 10 ₽';
                 status.className = 'status';
                 return;
             }
-
             status.textContent = '⏳ Генерируем ссылку для оплаты...';
             status.className = 'status loading';
-
             setTimeout(() => {
                 status.className = 'status success';
-                status.innerHTML = `
+                status.innerHTML =
+                    `
 ✅ Оплата по СБП\n
 📱 Номер телефона: <b>+7 911 894 00 96</b>\n
 💳 Номер карты: <b>2200 3961 1698 9951</b>\n
@@ -891,34 +782,26 @@
             }, 1000);
         }
 
-        // ============================================================
-        // 💳 ОПЛАТА КАРТОЙ (заглушка)
-        // ============================================================
         function payCard() {
             const status = document.getElementById('topupStatus');
             status.textContent = '⏳ Перенаправление на оплату картой...';
             status.className = 'status loading';
-
             setTimeout(() => {
                 status.className = 'status';
-                status.innerHTML = `
+                status.innerHTML =
+                    `
 ❌ Оплата картой временно недоступна.\n
 Используйте СБП или звёзды.
                 `;
             }, 1500);
         }
 
-        // ============================================================
-        // 🃏 РЕНДЕР КАТАЛОГА
-        // ============================================================
         function renderCatalog(filter = 'all', search = '') {
             const container = document.getElementById('catalog');
             let filtered = countries;
-
             if (filter !== 'all') {
                 filtered = filtered.filter(c => c.type === filter);
             }
-
             if (search) {
                 const q = search.toLowerCase();
                 filtered = filtered.filter(c =>
@@ -926,9 +809,9 @@
                     c.code.includes(q)
                 );
             }
-
             if (filtered.length === 0) {
-                container.innerHTML = `
+                container.innerHTML =
+                    `
                     <div class="empty-state">
                         <span class="icon">😔</span>
                         Нет номеров по вашему запросу
@@ -936,17 +819,15 @@
                 `;
                 return;
             }
-
             let html = '';
             filtered.forEach((c, index) => {
                 const spamLabel = c.spam ? '🚫 Спам-блок' : '✅ Без спама';
                 const typeLabel = c.type === 'саморег' ?
                     `<span class="self-badge">${c.type} (+50₽)</span>` :
                     `<span>${c.type}</span>`;
-                const delay = Math.min(index % 10, 4) + 1;
-
+                const delayClass = `delay-${(index % 8) + 1}`;
                 html += `
-                    <div class="product-card animate delay-${delay}">
+                    <div class="product-card card-animate ${delayClass}">
                         <div class="row">
                             <div class="left">
                                 <span class="flag">${c.flag}</span>
@@ -970,13 +851,9 @@
             container.innerHTML = html;
         }
 
-        // ============================================================
-        // 🛍 КОРЗИНА
-        // ============================================================
         function addToCart(code, name, price, btn) {
             cart.push({ code, name, price });
             document.getElementById('cartCount').textContent = cart.length;
-
             if (btn) {
                 const rect = btn.getBoundingClientRect();
                 const ripple = document.createElement('span');
@@ -989,7 +866,6 @@
                 btn.appendChild(ripple);
                 setTimeout(() => ripple.remove(), 600);
             }
-
             showToast(`✅ ${name} добавлен в корзину`);
             tg.HapticFeedback.impactOccurred('light');
             tg.sendData(JSON.stringify({ action: 'update_cart', cart: cart }));
@@ -1010,9 +886,6 @@
             tg.showAlert(text);
         }
 
-        // ============================================================
-        // 🍞 TOAST
-        // ============================================================
         let toastTimer = null;
 
         function showToast(msg) {
@@ -1025,9 +898,6 @@
             }, 2500);
         }
 
-        // ============================================================
-        // 🎛️ ФИЛЬТРЫ
-        // ============================================================
         function filterAll() {
             currentFilter = 'all';
             document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
@@ -1048,11 +918,7 @@
             renderCatalog(currentFilter, e.target.value);
         });
 
-        // ============================================================
-        // 🚀 ЗАПУСК
-        // ============================================================
         renderCatalog('all', '');
     </script>
-
 </body>
 </html>
