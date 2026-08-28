@@ -6,7 +6,6 @@
     <title>FRIZ SHOP</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
-        /* ... (весь твой старый CSS, без изменений) ... */
         * {
             margin: 0;
             padding: 0;
@@ -32,6 +31,7 @@
             min-height: 100vh;
             overflow-x: hidden;
         }
+
         @keyframes fadeUp {
             0% { opacity: 0; transform: translateY(25px) scale(0.97); }
             100% { opacity: 1; transform: translateY(0) scale(1); }
@@ -48,6 +48,7 @@
             0% { transform: translateY(40px); opacity: 0; }
             100% { transform: translateY(0); opacity: 1; }
         }
+
         .card-animate {
             animation: fadeUp 0.5s cubic-bezier(0.4, 0, 0.2, 1) forwards;
             opacity: 0;
@@ -60,9 +61,11 @@
         .card-animate.delay-6 { animation-delay: 0.18s; }
         .card-animate.delay-7 { animation-delay: 0.21s; }
         .card-animate.delay-8 { animation-delay: 0.24s; }
+
         .modal-animate {
             animation: slideUp 0.4s cubic-bezier(0.4, 0, 0.2, 1) forwards;
         }
+
         .header {
             display: flex;
             justify-content: space-between;
@@ -119,6 +122,7 @@
             border-color: #ff5555;
             transform: scale(1.05);
         }
+
         .hero-title {
             font-size: 28px;
             font-weight: 800;
@@ -137,6 +141,7 @@
             font-size: 14px;
             margin-bottom: 16px;
         }
+
         .search-input {
             width: 100%;
             padding: 14px 18px;
@@ -154,6 +159,7 @@
             box-shadow: 0 0 0 4px var(--primary-glow);
         }
         .search-input::placeholder { color: #555; }
+
         .filter-row {
             display: flex;
             gap: 8px;
@@ -187,6 +193,7 @@
             background: #1a0e0e;
             color: #fff;
         }
+
         .catalog-grid {
             display: flex;
             flex-direction: column;
@@ -287,6 +294,7 @@
             animation: rippleAnim 0.6s linear;
             pointer-events: none;
         }
+
         .empty-state {
             text-align: center;
             color: #555;
@@ -298,6 +306,7 @@
             display: block;
             margin-bottom: 16px;
         }
+
         .overlay {
             display: none;
             position: fixed;
@@ -424,6 +433,7 @@
         .modal .status.success { color: #6bff6b; }
         .modal .status.loading { color: #ffd93d; }
         .modal .status.stars { color: #f5b700; }
+
         .toast {
             position: fixed;
             top: 20px;
@@ -448,6 +458,7 @@
             opacity: 1;
             transform: translateX(-50%) translateY(0);
         }
+
         .bottom-nav {
             position: fixed;
             bottom: 0;
@@ -555,33 +566,7 @@
         let userData = tg.initDataUnsafe?.user || {};
 
         // ============================================================
-        // ПОЛУЧАЕМ БАЛАНС ПРИ ЗАГРУЗКЕ
-        // ============================================================
-        function loadBalance() {
-            tg.sendData(JSON.stringify({ action: 'get_balance' }));
-        }
-
-        // ============================================================
-        // ОБРАБОТЧИК ОТВЕТА ОТ БОТА (ЧЕРЕЗ WebApp)
-        // ============================================================
-        tg.onEvent('message', function(msg) {
-            try {
-                const data = JSON.parse(msg.data);
-                if (data.action === 'balance_updated') {
-                    userBalance = data.balance;
-                    document.getElementById('profileBalance').textContent = `${userBalance} ₽`;
-                    document.getElementById('topupBalance').textContent = `${userBalance} ₽`;
-                }
-            } catch (e) {
-                // Игнорируем
-            }
-        });
-
-        // Вызываем загрузку баланса
-        loadBalance();
-
-        // ============================================================
-        // ОСТАЛЬНОЙ КОД (КАТАЛОГ, КОРЗИНА, ПОПОЛНЕНИЕ)
+        // КАТАЛОГ
         // ============================================================
         const rawCountries = [
             { code: "+1", flag: "🇺🇸", name: "США", base: 49, types: ["отлега"], spam: false },
