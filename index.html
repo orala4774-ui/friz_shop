@@ -573,18 +573,18 @@
         }
 
         // ============================================================
-        // ОБРАБОТЧИК ОТВЕТА ОТ БОТА
+        // ОБРАБОТЧИК ОТВЕТА ОТ БОТА (ЧЕРЕЗ window.addEventListener)
         // ============================================================
-        tg.onEvent('message', function(msg) {
+        window.addEventListener('message', function(event) {
             try {
-                const data = JSON.parse(msg.data);
+                const data = JSON.parse(event.data);
                 if (data.action === 'balance_updated') {
                     userBalance = data.balance;
                     document.getElementById('profileBalance').textContent = `${userBalance} ₽`;
                     document.getElementById('topupBalance').textContent = `${userBalance} ₽`;
                 }
             } catch (e) {
-                console.log('Ошибка парсинга:', e);
+                // Игнорируем, если это не JSON
             }
         });
 
