@@ -2,256 +2,201 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>FRIZ SHOP</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
+        /* ============================================================
+           🔥 ОСНОВНЫЕ СТИЛИ
+           ============================================================ */
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
         }
-
+        :root {
+            --primary: #cc3333;
+            --primary-hover: #aa2222;
+            --primary-glow: rgba(204, 51, 51, 0.3);
+            --bg-dark: #0a0a0a;
+            --bg-card: #120808;
+            --bg-card-hover: #1a0e0e;
+            --border-color: #2a0a0a;
+            --text-primary: #ffffff;
+            --text-secondary: #888888;
+            --text-muted: #555555;
+            --radius: 16px;
+            --radius-xl: 28px;
+            --shadow: 0 20px 60px rgba(0, 0, 0, 0.8);
+            --transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: #0a0a0a;
-            color: #e0e0e0;
+            background: var(--bg-dark);
+            color: var(--text-primary);
             padding: 16px 12px 80px 12px;
             min-height: 100vh;
+            overflow-x: hidden;
         }
 
-        /* ===== ШАПКА ===== */
+        /* ============================================================
+           ✨ АНИМАЦИИ
+           ============================================================ */
+        @keyframes fadeUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        @keyframes pulse {
+            0%,
+            100% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.05);
+            }
+        }
+        @keyframes shimmer {
+            0% {
+                background-position: -200% center;
+            }
+            100% {
+                background-position: 200% center;
+            }
+        }
+        .animate {
+            animation: fadeUp 0.5s ease forwards;
+            opacity: 0;
+        }
+        .delay-1 {
+            animation-delay: 0.05s;
+        }
+        .delay-2 {
+            animation-delay: 0.1s;
+        }
+        .delay-3 {
+            animation-delay: 0.15s;
+        }
+        .delay-4 {
+            animation-delay: 0.2s;
+        }
+
+        /* ============================================================
+           🏷️ ГЛАВНЫЙ ЗАГОЛОВОК
+           ============================================================ */
+        .main-title {
+            font-size: 26px;
+            font-weight: 800;
+            text-align: center;
+            padding: 12px 0 6px;
+            background: linear-gradient(135deg, #cc3333, #ff5555, #cc3333);
+            background-size: 200% auto;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: shimmer 3s linear infinite;
+            letter-spacing: -0.5px;
+        }
+
+        /* ============================================================
+           🧩 ШАПКА
+           ============================================================ */
         .header {
             display: flex;
             justify-content: space-between;
             align-items: center;
+            padding: 12px 0 16px;
+            border-bottom: 1px solid var(--border-color);
             margin-bottom: 20px;
-            padding-bottom: 12px;
-            border-bottom: 1px solid #2a0a0a;
         }
-
-        .header .logo {
-            font-size: 22px;
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .header-logo {
+            font-size: 24px;
             font-weight: 700;
             background: linear-gradient(135deg, #cc3333, #ff4444);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
+            letter-spacing: -0.5px;
         }
-
-        .header .right {
+        .header-right {
             display: flex;
             align-items: center;
-            gap: 14px;
+            gap: 16px;
         }
-
-        .header .cart-badge {
-            background: #cc3333;
+        .header-badge {
+            background: var(--primary);
             color: #fff;
             border-radius: 50%;
             padding: 4px 10px;
-            font-size: 14px;
-            font-weight: 600;
+            font-size: 13px;
+            font-weight: 700;
             cursor: pointer;
+            transition: var(--transition);
+            min-width: 28px;
+            text-align: center;
         }
-
-        .header .avatar {
+        .header-badge:hover {
+            transform: scale(1.05);
+        }
+        .header-avatar {
             width: 40px;
             height: 40px;
             border-radius: 50%;
-            background: #cc3333;
+            background: var(--primary);
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 20px;
-            cursor: pointer;
-            border: 2px solid #cc3333;
-            transition: 0.2s;
-            font-weight: 600;
-            color: #fff;
-            text-transform: uppercase;
-        }
-
-        .header .avatar:hover {
-            border-color: #ff4444;
-        }
-
-        /* ===== ОВЕРЛЕЙ ===== */
-        .overlay {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0, 0, 0, 0.8);
-            backdrop-filter: blur(6px);
-            z-index: 1000;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .overlay.open {
-            display: flex;
-        }
-
-        .card-modal {
-            background: #1a0a0a;
-            border-radius: 28px;
-            padding: 32px 28px;
-            width: 90%;
-            max-width: 400px;
-            border: 1px solid #2a0a0a;
-            text-align: center;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.9);
-            max-height: 90vh;
-            overflow-y: auto;
-        }
-
-        .card-modal .big-avatar {
-            width: 80px;
-            height: 80px;
-            border-radius: 50%;
-            background: #cc3333;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 40px;
-            margin: 0 auto 12px;
-            font-weight: 600;
-            color: #fff;
-            text-transform: uppercase;
-        }
-
-        .card-modal .name {
-            font-size: 20px;
-            font-weight: 600;
-            margin-bottom: 4px;
-        }
-
-        .card-modal .id {
-            font-size: 14px;
-            color: #888;
-            margin-bottom: 16px;
-        }
-
-        .card-modal .balance {
-            background: #120808;
-            padding: 12px;
-            border-radius: 16px;
-            border: 1px solid #2a0a0a;
-            margin-bottom: 20px;
-        }
-
-        .card-modal .balance .label {
-            font-size: 13px;
-            color: #888;
-        }
-
-        .card-modal .balance .amount {
-            font-size: 26px;
+            font-size: 18px;
             font-weight: 700;
-            color: #ff4444;
-        }
-
-        .card-modal .btn {
-            border: none;
-            color: #fff;
-            padding: 12px 24px;
-            border-radius: 14px;
-            font-size: 16px;
-            font-weight: 600;
             cursor: pointer;
-            width: 100%;
-            margin-top: 8px;
-            transition: 0.2s;
+            border: 2px solid var(--primary);
+            transition: var(--transition);
+            color: #fff;
+            text-transform: uppercase;
+            user-select: none;
+        }
+        .header-avatar:hover {
+            border-color: #ff4444;
+            transform: scale(1.05);
         }
 
-        .card-modal .btn-primary {
-            background: #cc3333;
-        }
-
-        .card-modal .btn-primary:hover {
-            background: #aa2222;
-        }
-
-        .card-modal .btn-secondary {
-            background: #2a2a2a;
-        }
-
-        .card-modal .btn-secondary:hover {
-            background: #3a3a3a;
-        }
-
-        .card-modal .btn-stars {
-            background: #f5b700;
-            color: #000;
-        }
-
-        .card-modal .btn-stars:hover {
-            background: #e0a500;
-        }
-
-        .card-modal .input-field {
-            width: 100%;
-            padding: 12px 16px;
-            background: #1a0a0a;
-            border: 1px solid #331111;
-            border-radius: 12px;
-            color: #e0e0e0;
-            font-size: 16px;
-            outline: none;
+        /* ============================================================
+           🔍 ПОИСК
+           ============================================================ */
+        .search-container {
             margin-bottom: 16px;
         }
-
-        .card-modal .input-field:focus {
-            border-color: #cc3333;
-        }
-
-        .status-box {
-            margin-top: 12px;
-            font-size: 14px;
-            color: #ff6b6b;
-            white-space: pre-line;
-            text-align: left;
-            background: #120808;
-            padding: 12px;
-            border-radius: 12px;
-            border: 1px solid #1f0c0c;
-        }
-
-        .status-box.success {
-            color: #6bff6b;
-        }
-
-        .status-box.loading {
-            color: #ffd93d;
-        }
-
-        .status-box.stars {
-            color: #f5b700;
-        }
-
-        /* ===== ПОИСК И ФИЛЬТРЫ ===== */
         .search-input {
             width: 100%;
-            padding: 12px 16px;
-            background: #1a0a0a;
-            border: 1px solid #331111;
-            border-radius: 12px;
-            color: #e0e0e0;
+            padding: 14px 18px;
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius);
+            color: var(--text-primary);
             font-size: 15px;
-            margin-bottom: 16px;
             outline: none;
+            transition: var(--transition);
         }
-
         .search-input:focus {
-            border-color: #cc3333;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 4px var(--primary-glow);
         }
-
         .search-input::placeholder {
-            color: #555;
+            color: var(--text-muted);
         }
 
+        /* ============================================================
+           🎛️ ФИЛЬТРЫ
+           ============================================================ */
         .filter-row {
             display: flex;
             gap: 8px;
@@ -259,194 +204,412 @@
             padding-bottom: 12px;
             margin-bottom: 16px;
             flex-wrap: nowrap;
+            scrollbar-width: none;
+            -webkit-overflow-scrolling: touch;
         }
-
-        .filter-row button {
-            background: #1a0a0a;
-            border: 1px solid #331111;
-            color: #888;
-            padding: 6px 16px;
-            border-radius: 20px;
+        .filter-row::-webkit-scrollbar {
+            display: none;
+        }
+        .filter-btn {
+            flex-shrink: 0;
+            padding: 8px 18px;
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            color: var(--text-secondary);
+            border-radius: 24px;
             font-size: 13px;
-            white-space: nowrap;
+            font-weight: 500;
             cursor: pointer;
-            transition: 0.2s;
+            transition: var(--transition);
+            white-space: nowrap;
         }
-
-        .filter-row button.active {
-            background: #cc3333;
-            border-color: #cc3333;
+        .filter-btn.active {
+            background: var(--primary);
+            border-color: var(--primary);
+            color: #fff;
+        }
+        .filter-btn:hover {
+            background: var(--bg-card-hover);
             color: #fff;
         }
 
-        .filter-row button:hover {
-            background: #2a1111;
-            color: #fff;
+        /* ============================================================
+           🃏 КАРТОЧКИ ТОВАРОВ
+           ============================================================ */
+        .catalog-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
         }
-
-        /* ===== КАРТОЧКИ ТОВАРОВ ===== */
-        .card-item {
-            background: #120808;
-            border-radius: 16px;
-            padding: 16px;
-            margin-bottom: 14px;
-            border: 1px solid #1f0c0c;
-            transition: 0.2s;
+        .product-card {
+            background: var(--bg-card);
+            border-radius: var(--radius);
+            padding: 18px 16px;
+            border: 1px solid var(--border-color);
+            transition: var(--transition);
+            animation: fadeUp 0.4s ease forwards;
+            opacity: 0;
+            position: relative;
+            overflow: hidden;
         }
-
-        .card-item:hover {
-            border-color: #cc3333;
+        .product-card::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, transparent 60%, rgba(204, 51, 51, 0.03));
+            pointer-events: none;
         }
-
-        .card-header {
+        .product-card:hover {
+            border-color: var(--primary);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(204, 51, 51, 0.06);
+        }
+        .product-card .row {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 6px;
         }
-
-        .card-header .flag {
-            font-size: 28px;
+        .product-card .left {
+            display: flex;
+            align-items: center;
+            gap: 12px;
         }
-
-        .card-header .code {
-            font-size: 18px;
-            font-weight: 600;
+        .product-card .flag {
+            font-size: 30px;
+            line-height: 1;
+        }
+        .product-card .info {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+        .product-card .code {
+            font-size: 17px;
+            font-weight: 700;
             color: #fff;
         }
-
-        .card-header .price {
+        .product-card .name {
+            font-size: 14px;
+            color: var(--text-secondary);
+        }
+        .product-card .price {
             font-size: 20px;
             font-weight: 700;
             color: #ff4444;
+            white-space: nowrap;
         }
-
-        .card-desc {
-            font-size: 13px;
-            color: #777;
-            margin-bottom: 8px;
-            line-height: 1.4;
-        }
-
-        .card-meta {
+        .product-card .meta {
             display: flex;
             flex-wrap: wrap;
-            gap: 8px;
-            font-size: 13px;
-            color: #666;
-            margin-bottom: 12px;
+            gap: 6px;
+            margin-top: 10px;
+            padding-top: 10px;
+            border-top: 1px solid var(--border-color);
         }
-
-        .card-meta span {
-            background: #1a0a0a;
+        .product-card .meta span {
+            background: var(--bg-dark);
             padding: 2px 12px;
             border-radius: 12px;
-            border: 1px solid #221010;
+            font-size: 12px;
+            color: var(--text-secondary);
+            border: 1px solid var(--border-color);
         }
-
-        .card-meta .self-badge {
-            background: #cc3333;
+        .product-card .meta .self-badge {
+            background: var(--primary);
             color: #fff;
-            border-color: #cc3333;
+            border-color: var(--primary);
         }
-
-        .card-item .btn-buy {
+        .product-card .btn-buy {
             width: 100%;
-            padding: 10px;
-            background: #cc3333;
+            margin-top: 12px;
+            padding: 11px;
+            background: var(--primary);
             border: none;
-            border-radius: 10px;
+            border-radius: 12px;
             color: #fff;
             font-size: 16px;
             font-weight: 600;
             cursor: pointer;
-            transition: 0.2s;
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
         }
-
-        .card-item .btn-buy:hover {
-            background: #aa2222;
+        .product-card .btn-buy:hover {
+            background: var(--primary-hover);
             transform: scale(1.01);
         }
-
-        .card-item .btn-buy:active {
+        .product-card .btn-buy:active {
             transform: scale(0.97);
         }
-
-        .empty {
-            text-align: center;
-            color: #444;
-            padding: 40px 0;
-            font-size: 16px;
+        .product-card .btn-buy .ripple {
+            position: absolute;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.2);
+            transform: scale(0);
+            animation: rippleAnim 0.6s linear;
+            pointer-events: none;
+        }
+        @keyframes rippleAnim {
+            to {
+                transform: scale(4);
+                opacity: 0;
+            }
         }
 
-        /* ===== TOAST ===== */
+        .empty-state {
+            text-align: center;
+            color: var(--text-muted);
+            padding: 60px 0;
+            font-size: 16px;
+        }
+        .empty-state .icon {
+            font-size: 48px;
+            display: block;
+            margin-bottom: 16px;
+        }
+
+        /* ============================================================
+           🪟 МОДАЛЬНЫЕ ОКНА
+           ============================================================ */
+        .overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            animation: fadeUp 0.3s ease;
+        }
+        .overlay.open {
+            display: flex;
+        }
+        .modal {
+            background: var(--bg-card);
+            border-radius: var(--radius-xl);
+            padding: 32px 28px;
+            width: 100%;
+            max-width: 400px;
+            border: 1px solid var(--border-color);
+            box-shadow: var(--shadow);
+            max-height: 90vh;
+            overflow-y: auto;
+            animation: fadeUp 0.3s ease;
+        }
+        .modal .avatar-lg {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 36px;
+            margin: 0 auto 12px;
+            font-weight: 700;
+            color: #fff;
+            text-transform: uppercase;
+        }
+        .modal .title {
+            font-size: 20px;
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 4px;
+        }
+        .modal .sub {
+            font-size: 14px;
+            color: var(--text-secondary);
+            text-align: center;
+            margin-bottom: 16px;
+        }
+        .modal .balance-box {
+            background: var(--bg-dark);
+            padding: 14px;
+            border-radius: var(--radius);
+            border: 1px solid var(--border-color);
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        .modal .balance-box .label {
+            font-size: 13px;
+            color: var(--text-secondary);
+        }
+        .modal .balance-box .amount {
+            font-size: 28px;
+            font-weight: 700;
+            color: #ff4444;
+        }
+        .modal .input-field {
+            width: 100%;
+            padding: 14px 16px;
+            background: var(--bg-dark);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius);
+            color: var(--text-primary);
+            font-size: 16px;
+            outline: none;
+            margin-bottom: 14px;
+            transition: var(--transition);
+        }
+        .modal .input-field:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 4px var(--primary-glow);
+        }
+        .modal .btn {
+            width: 100%;
+            padding: 14px;
+            border: none;
+            border-radius: var(--radius);
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            margin-top: 8px;
+        }
+        .modal .btn-primary {
+            background: var(--primary);
+            color: #fff;
+        }
+        .modal .btn-primary:hover {
+            background: var(--primary-hover);
+        }
+        .modal .btn-secondary {
+            background: #2a2a2a;
+            color: #fff;
+        }
+        .modal .btn-secondary:hover {
+            background: #3a3a3a;
+        }
+        .modal .btn-stars {
+            background: #f5b700;
+            color: #000;
+        }
+        .modal .btn-stars:hover {
+            background: #e0a500;
+        }
+        .modal .status {
+            margin-top: 14px;
+            padding: 12px;
+            border-radius: var(--radius);
+            background: var(--bg-dark);
+            border: 1px solid var(--border-color);
+            font-size: 14px;
+            white-space: pre-line;
+            color: #ff6b6b;
+            transition: var(--transition);
+        }
+        .modal .status.success {
+            color: #6bff6b;
+        }
+        .modal .status.loading {
+            color: #ffd93d;
+        }
+        .modal .status.stars {
+            color: #f5b700;
+        }
+
+        /* ============================================================
+           🍞 TOAST-УВЕДОМЛЕНИЯ
+           ============================================================ */
         .toast {
             position: fixed;
             top: 20px;
             left: 50%;
-            transform: translateX(-50%);
-            background: #cc3333;
+            transform: translateX(-50%) translateY(-20px);
+            background: var(--bg-card);
             color: #fff;
-            padding: 10px 24px;
-            border-radius: 12px;
+            padding: 12px 24px;
+            border-radius: var(--radius);
+            border: 1px solid var(--primary);
             font-size: 14px;
             opacity: 0;
-            transition: 0.3s;
-            z-index: 999;
             pointer-events: none;
+            z-index: 9999;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.6);
+            text-align: center;
+            max-width: 90%;
         }
-
         .toast.show {
             opacity: 1;
+            transform: translateX(-50%) translateY(0);
         }
 
-        /* ===== НИЖНЯЯ НАВИГАЦИЯ ===== */
+        /* ============================================================
+           📱 НИЖНЯЯ НАВИГАЦИЯ
+           ============================================================ */
         .bottom-nav {
             position: fixed;
             bottom: 0;
             left: 0;
             right: 0;
-            background: #0a0a0a;
-            border-top: 1px solid #1a0a0a;
+            background: var(--bg-dark);
+            border-top: 1px solid var(--border-color);
             display: flex;
             justify-content: space-around;
-            padding: 10px 0 14px 0;
-            backdrop-filter: blur(10px);
+            padding: 10px 0 16px 0;
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            z-index: 100;
         }
-
         .bottom-nav a {
-            color: #666;
+            color: var(--text-secondary);
             text-decoration: none;
             font-size: 12px;
             display: flex;
             flex-direction: column;
             align-items: center;
             gap: 2px;
-            transition: 0.2s;
+            transition: var(--transition);
             cursor: pointer;
+            padding: 4px 12px;
+            border-radius: 12px;
+            user-select: none;
         }
-
         .bottom-nav a.active {
-            color: #cc3333;
+            color: var(--primary);
+        }
+        .bottom-nav a .icon {
+            font-size: 24px;
+            line-height: 1;
+        }
+        .bottom-nav a:hover {
+            color: #fff;
         }
 
-        .bottom-nav a .icon {
-            font-size: 22px;
+        /* ============================================================
+           🧩 УТИЛИТЫ
+           ============================================================ */
+        .mt-8 {
+            margin-top: 8px;
+        }
+        .text-center {
+            text-align: center;
+        }
+        .gap-8 {
+            gap: 8px;
         }
     </style>
 </head>
 <body>
 
-    <!-- TOAST -->
-    <div class="toast" id="toast">✅ Добавлено в корзину</div>
+    <!-- ============================================================
+    🍞 TOAST
+    ============================================================ -->
+    <div class="toast" id="toast"></div>
 
-    <!-- ПРОФИЛЬ -->
+    <!-- ============================================================
+    👤 ПРОФИЛЬ
+    ============================================================ -->
     <div class="overlay" id="profileOverlay">
-        <div class="card-modal">
-            <div class="big-avatar" id="profileAvatar">👤</div>
-            <div class="name" id="profileName">Пользователь</div>
-            <div class="id" id="profileId">ID: 123456789</div>
-            <div class="balance">
+        <div class="modal">
+            <div class="avatar-lg" id="profileAvatar">👤</div>
+            <div class="title" id="profileName">Пользователь</div>
+            <div class="sub" id="profileId">ID: 123456789</div>
+            <div class="balance-box">
                 <div class="label">💰 Баланс</div>
                 <div class="amount" id="profileBalance">0 ₽</div>
             </div>
@@ -454,62 +617,83 @@
         </div>
     </div>
 
-    <!-- ПОПОЛНЕНИЕ -->
+    <!-- ============================================================
+    💳 ПОПОЛНЕНИЕ
+    ============================================================ -->
     <div class="overlay" id="topupOverlay">
-        <div class="card-modal">
-            <div class="big-avatar">💳</div>
-            <div class="name">Пополнить баланс</div>
-            <div class="id" style="font-size:14px; color:#888; margin-bottom:16px;">Выберите способ оплаты</div>
+        <div class="modal">
+            <div class="avatar-lg">💳</div>
+            <div class="title">Пополнить баланс</div>
+            <div class="sub">Выберите способ оплаты</div>
 
-            <div class="balance">
+            <div class="balance-box">
                 <div class="label">💰 Текущий баланс</div>
                 <div class="amount" id="topupBalance">0 ₽</div>
             </div>
 
-            <input type="number" class="input-field" id="topupAmount" value="100" min="10" step="10" placeholder="Сумма пополнения (₽)">
+            <input type="number" class="input-field" id="topupAmount" value="100" min="10" step="10" placeholder="Сумма (₽)">
 
-            <button class="btn btn-stars" onclick="payStars()" style="margin-bottom:10px;">
+            <button class="btn btn-stars" onclick="payStars()">
                 ⭐ Оплатить звёздами (1 ⭐ = 1 ₽)
             </button>
-            <button class="btn btn-primary" onclick="paySBP()" style="margin-bottom:10px;">
+            <button class="btn btn-primary" onclick="paySBP()">
                 🇷🇺 Оплатить по СБП
             </button>
-            <button class="btn btn-secondary" onclick="payCard()" style="margin-bottom:10px;">
+            <button class="btn btn-secondary" onclick="payCard()">
                 💳 Оплатить картой
             </button>
             <button class="btn btn-secondary" onclick="closeOverlay('topupOverlay')">
                 ✖ Закрыть
             </button>
 
-            <div class="status-box" id="topupStatus"></div>
+            <div class="status" id="topupStatus"></div>
         </div>
     </div>
 
-    <!-- ШАПКА -->
-    <div class="header">
-        <div class="logo">🛒 FRIZ SHOP</div>
-        <div class="right">
-            <div class="cart-badge" id="cartCount" onclick="showCart()">0</div>
-            <div class="avatar" id="avatarBtn" onclick="openProfile()">👤</div>
+    <!-- ============================================================
+    🏷️ ГЛАВНЫЙ ЗАГОЛОВОК
+    ============================================================ -->
+    <div class="main-title animate delay-1">🛒 FRIZ SHOP</div>
+
+    <!-- ============================================================
+    🧩 ШАПКА
+    ============================================================ -->
+    <div class="header animate delay-2">
+        <div class="header-left">
+            <span class="header-logo">⚡</span>
+        </div>
+        <div class="header-right">
+            <span class="header-badge" id="cartCount" onclick="showCart()">0</span>
+            <div class="header-avatar" id="avatarBtn" onclick="openProfile()">👤</div>
         </div>
     </div>
 
-    <!-- ПОИСК -->
-    <input class="search-input" id="searchInput" placeholder="🔍 Поиск по стране или коду..." />
-
-    <!-- ФИЛЬТРЫ -->
-    <div class="filter-row" id="filterRow">
-        <button class="active" data-filter="all">Все</button>
-        <button data-filter="новорег">🆕 Новорег</button>
-        <button data-filter="авторег">🤖 Авторег</button>
-        <button data-filter="саморег">📱 Саморег</button>
-        <button data-filter="отлега">⏳ Отлега</button>
+    <!-- ============================================================
+    🔍 ПОИСК
+    ============================================================ -->
+    <div class="search-container animate delay-3">
+        <input class="search-input" id="searchInput" placeholder="🔍 Поиск по стране или коду..." />
     </div>
 
-    <!-- КАТАЛОГ -->
-    <div id="catalog"></div>
+    <!-- ============================================================
+    🎛️ ФИЛЬТРЫ
+    ============================================================ -->
+    <div class="filter-row animate delay-4" id="filterRow">
+        <button class="filter-btn active" data-filter="all">Все</button>
+        <button class="filter-btn" data-filter="новорег">🆕 Новорег</button>
+        <button class="filter-btn" data-filter="авторег">🤖 Авторег</button>
+        <button class="filter-btn" data-filter="саморег">📱 Саморег</button>
+        <button class="filter-btn" data-filter="отлега">⏳ Отлега</button>
+    </div>
 
-    <!-- НИЖНЯЯ НАВИГАЦИЯ -->
+    <!-- ============================================================
+    🃏 КАТАЛОГ
+    ============================================================ -->
+    <div class="catalog-grid" id="catalog"></div>
+
+    <!-- ============================================================
+    📱 НИЖНЯЯ НАВИГАЦИЯ
+    ============================================================ -->
     <div class="bottom-nav">
         <a href="#" class="active" onclick="filterAll()"><span class="icon">🏠</span> Каталог</a>
         <a href="#" onclick="showCart()"><span class="icon">🛍</span> Корзина</a>
@@ -517,6 +701,9 @@
     </div>
 
     <script>
+        // ============================================================
+        // 🔥 ИНИЦИАЛИЗАЦИЯ TELEGRAM WEB APP
+        // ============================================================
         const tg = window.Telegram.WebApp;
         tg.ready();
         tg.expand();
@@ -524,9 +711,10 @@
         let cart = [];
         let currentFilter = 'all';
         let userBalance = 0;
+        let userData = tg.initDataUnsafe?.user || {};
 
         // ============================================================
-        // ДАННЫЕ КАТАЛОГА
+        // 📦 КАТАЛОГ
         // ============================================================
         const rawCountries = [
             { code: "+1", flag: "🇺🇸", name: "США", base: 49, types: ["отлега"], spam: false },
@@ -585,7 +773,7 @@
             { code: "+44", flag: "🇬🇧", name: "Великобритания", base: 159, types: ["авторег"], spam: false }
         ];
 
-        // Разворачиваем в отдельные лоты с ценами
+        // Разворачиваем с ценами
         const countries = [];
         rawCountries.forEach(item => {
             item.types.forEach(type => {
@@ -597,13 +785,17 @@
                     name: item.name,
                     type: type,
                     price: price,
-                    spam: item.spam
+                    spam: item.spam,
+                    raw: item
                 });
             });
         });
 
+        // Сортировка по цене (возрастание)
+        countries.sort((a, b) => a.price - b.price);
+
         // ============================================================
-        // УПРАВЛЕНИЕ ОВЕРЛЕЯМИ
+        // 🧩 УПРАВЛЕНИЕ ОВЕРЛЕЯМИ
         // ============================================================
         function openOverlay(id) {
             document.getElementById(id).classList.add('open');
@@ -614,10 +806,10 @@
         }
 
         // ============================================================
-        // ПРОФИЛЬ
+        // 👤 ПРОФИЛЬ
         // ============================================================
         function openProfile() {
-            const user = tg.initDataUnsafe?.user;
+            const user = userData;
             const name = user?.first_name || 'Пользователь';
             const id = user?.id || '—';
             const avatar = name.charAt(0).toUpperCase() || '👤';
@@ -630,12 +822,12 @@
         }
 
         // ============================================================
-        // ПОПОЛНЕНИЕ
+        // 💳 ПОПОЛНЕНИЕ
         // ============================================================
         function openTopup() {
             document.getElementById('topupBalance').textContent = `${userBalance} ₽`;
             document.getElementById('topupStatus').textContent = '';
-            document.getElementById('topupStatus').className = 'status-box';
+            document.getElementById('topupStatus').className = 'status';
             openOverlay('topupOverlay');
         }
 
@@ -648,12 +840,12 @@
 
             if (amount < 10) {
                 status.textContent = '❌ Минимальная сумма — 10 ₽ (10 ⭐)';
-                status.className = 'status-box';
+                status.className = 'status';
                 return;
             }
 
             status.textContent = `⏳ Создаём платёж на ${amount} ⭐...`;
-            status.className = 'status-box loading';
+            status.className = 'status loading';
 
             tg.sendData(JSON.stringify({
                 action: 'pay_stars_topup',
@@ -661,7 +853,7 @@
             }));
 
             setTimeout(() => {
-                status.className = 'status-box stars';
+                status.className = 'status stars';
                 status.innerHTML = `
 ⭐ *Оплата звёздами*\n\n
 💳 Сумма: ${amount} ⭐ (${amount} ₽)\n\n
@@ -680,15 +872,15 @@
 
             if (amount < 10) {
                 status.textContent = '❌ Минимальная сумма — 10 ₽';
-                status.className = 'status-box';
+                status.className = 'status';
                 return;
             }
 
             status.textContent = '⏳ Генерируем ссылку для оплаты...';
-            status.className = 'status-box loading';
+            status.className = 'status loading';
 
             setTimeout(() => {
-                status.className = 'status-box success';
+                status.className = 'status success';
                 status.innerHTML = `
 ✅ Оплата по СБП\n
 📱 Номер телефона: <b>+7 911 894 00 96</b>\n
@@ -705,10 +897,10 @@
         function payCard() {
             const status = document.getElementById('topupStatus');
             status.textContent = '⏳ Перенаправление на оплату картой...';
-            status.className = 'status-box loading';
+            status.className = 'status loading';
 
             setTimeout(() => {
-                status.className = 'status-box';
+                status.className = 'status';
                 status.innerHTML = `
 ❌ Оплата картой временно недоступна.\n
 Используйте СБП или звёзды.
@@ -717,7 +909,7 @@
         }
 
         // ============================================================
-        // РЕНДЕР КАТАЛОГА
+        // 🃏 РЕНДЕР КАТАЛОГА
         // ============================================================
         function renderCatalog(filter = 'all', search = '') {
             const container = document.getElementById('catalog');
@@ -736,30 +928,42 @@
             }
 
             if (filtered.length === 0) {
-                container.innerHTML = `<div class="empty">😔 Нет номеров по вашему запросу</div>`;
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <span class="icon">😔</span>
+                        Нет номеров по вашему запросу
+                    </div>
+                `;
                 return;
             }
 
             let html = '';
-            filtered.forEach(c => {
+            filtered.forEach((c, index) => {
                 const spamLabel = c.spam ? '🚫 Спам-блок' : '✅ Без спама';
                 const typeLabel = c.type === 'саморег' ?
                     `<span class="self-badge">${c.type} (+50₽)</span>` :
                     `<span>${c.type}</span>`;
+                const delay = Math.min(index % 10, 4) + 1;
 
                 html += `
-                    <div class="card-item">
-                        <div class="card-header">
-                            <span class="flag">${c.flag}</span>
-                            <span class="code">${c.code}</span>
+                    <div class="product-card animate delay-${delay}">
+                        <div class="row">
+                            <div class="left">
+                                <span class="flag">${c.flag}</span>
+                                <div class="info">
+                                    <span class="code">${c.code}</span>
+                                    <span class="name">${c.name}</span>
+                                </div>
+                            </div>
                             <span class="price">${c.price} ₽</span>
                         </div>
-                        <div class="card-desc">${c.name}</div>
-                        <div class="card-meta">
+                        <div class="meta">
                             <span>${spamLabel}</span>
                             ${typeLabel}
                         </div>
-                        <button class="btn-buy" onclick="addToCart('${c.code}', '${c.name} (${c.type})', ${c.price})">🛒 Купить</button>
+                        <button class="btn-buy" onclick="addToCart('${c.code}', '${c.name} (${c.type})', ${c.price}, this)">
+                            🛒 Купить
+                        </button>
                     </div>
                 `;
             });
@@ -767,11 +971,25 @@
         }
 
         // ============================================================
-        // КОРЗИНА
+        // 🛍 КОРЗИНА
         // ============================================================
-        function addToCart(code, name, price) {
+        function addToCart(code, name, price, btn) {
             cart.push({ code, name, price });
             document.getElementById('cartCount').textContent = cart.length;
+
+            if (btn) {
+                const rect = btn.getBoundingClientRect();
+                const ripple = document.createElement('span');
+                ripple.className = 'ripple';
+                const size = Math.max(rect.width, rect.height);
+                ripple.style.width = ripple.style.height = size + 'px';
+                ripple.style.left = '50%';
+                ripple.style.top = '50%';
+                ripple.style.transform = 'translate(-50%, -50%) scale(0)';
+                btn.appendChild(ripple);
+                setTimeout(() => ripple.remove(), 600);
+            }
+
             showToast(`✅ ${name} добавлен в корзину`);
             tg.HapticFeedback.impactOccurred('light');
             tg.sendData(JSON.stringify({ action: 'update_cart', cart: cart }));
@@ -779,7 +997,7 @@
 
         function showCart() {
             if (cart.length === 0) {
-                tg.showAlert('🛍 Корзина пуста');
+                showToast('🛍 Корзина пуста');
                 return;
             }
             let text = '🛍 Ваша корзина:\n\n';
@@ -792,30 +1010,38 @@
             tg.showAlert(text);
         }
 
+        // ============================================================
+        // 🍞 TOAST
+        // ============================================================
+        let toastTimer = null;
+
         function showToast(msg) {
             const el = document.getElementById('toast');
             el.textContent = msg;
             el.classList.add('show');
-            setTimeout(() => el.classList.remove('show'), 2500);
+            clearTimeout(toastTimer);
+            toastTimer = setTimeout(() => {
+                el.classList.remove('show');
+            }, 2500);
         }
 
         // ============================================================
-        // ФИЛЬТРЫ И ПОИСК
+        // 🎛️ ФИЛЬТРЫ
         // ============================================================
         function filterAll() {
             currentFilter = 'all';
-            document.querySelectorAll('.filter-row button').forEach(b => b.classList.remove('active'));
+            document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
             document.querySelector('[data-filter="all"]').classList.add('active');
             renderCatalog('all', document.getElementById('searchInput').value);
         }
 
         document.getElementById('filterRow').addEventListener('click', (e) => {
-            if (e.target.tagName === 'BUTTON') {
-                document.querySelectorAll('.filter-row button').forEach(b => b.classList.remove('active'));
-                e.target.classList.add('active');
-                currentFilter = e.target.dataset.filter;
-                renderCatalog(currentFilter, document.getElementById('searchInput').value);
-            }
+            const btn = e.target.closest('.filter-btn');
+            if (!btn) return;
+            document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            currentFilter = btn.dataset.filter;
+            renderCatalog(currentFilter, document.getElementById('searchInput').value);
         });
 
         document.getElementById('searchInput').addEventListener('input', (e) => {
@@ -823,9 +1049,10 @@
         });
 
         // ============================================================
-        // ЗАПУСК
+        // 🚀 ЗАПУСК
         // ============================================================
         renderCatalog('all', '');
     </script>
+
 </body>
 </html>
